@@ -397,7 +397,7 @@
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="speakText('اردو', 'ur-PK'); startGame('ur');" aria-label="Urdu language">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
       <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
     </div>
   </div>
@@ -1157,22 +1157,6 @@
       startTimer();
    }
 
-function speakText(text, lang) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // 停止上一段聲音
-        let utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang; // 例如傳入 'ur-PK' 或 'ur'
-        
-        // 嘗試抓取系統內建的烏爾都語語音
-        let voices = window.speechSynthesis.getVoices();
-        let targetVoice = voices.find(v => v.lang.startsWith('ur') || v.lang.includes('UR'));
-        if (targetVoice) {
-            utterance.voice = targetVoice;
-        }
-        
-        window.speechSynthesis.speak(utterance);
-    }
-}
   </script>
 </body>
 </html>

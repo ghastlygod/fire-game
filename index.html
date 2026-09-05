@@ -397,7 +397,7 @@
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="speakText('Urdu', 'ur-PK'); startGame('ur');" aria-label="Urdu language">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="safeSpeakAndStart('ur', 'Urdu');" aria-label="Urdu language">اردو (Urdu)</button>
       <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
     </div>
   </div>
@@ -1155,25 +1155,22 @@
 
       updateLanguageUI();
       startTimer();
-      function speakText(text, lang) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        let utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
-        
-        let voices = window.speechSynthesis.getVoices();
-        // 精準尋找烏爾都語（Pakistan）或一般烏爾都語語音
-        let targetVoice = voices.find(v => v.lang === 'ur-PK' || v.lang.startsWith('ur'));
-        if (targetVoice) {
-            utterance.voice = targetVoice;
+ }
+      function safeSpeakAndStart(langCode, speakTextStr) {
+    try {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance(speakTextStr);
+            utterance.lang = (langCode === 'ur') ? 'ur-PK' : langCode;
+            window.speechSynthesis.speak(utterance);
         }
-        
-        window.speechSynthesis.speak(utterance);
+    } catch (e) {
+        console.log("Speech error ignored", e);
     }
-}
-// 確保瀏覽器載入完語音清單
-if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    // 無論語音成功與否，一定執行換頁進入遊戲
+    if (typeof startGame === 'function') {
+        startGame(langCode);
+    }
 }
   </script>
 </body>

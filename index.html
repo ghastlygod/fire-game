@@ -397,7 +397,7 @@
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="safeSpeakAndStart('ur', 'Urdu language');" aria-label="Urdu language">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="safeSpeakAndStart('ur', 'آگ بجھانے والا میچ'); startGame('ur');" aria-label="Urdu language">اردو (Urdu)</button>
       <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
     </div>
   </div>
@@ -928,11 +928,6 @@
       displayBestRecord();
       updateLanguageUI();
       resetGame();
-      if ('speechSynthesis' in window) {
-        let utterance = new SpeechSynthesisUtterance("Game started in " + lang);
-        utterance.lang = 'en-US';
-        window.speechSynthesis.speak(utterance);
-    }
     }
 
     function showLangScreen() {

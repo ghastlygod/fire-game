@@ -25,7 +25,7 @@
       align-items: center;
       min-height: 100vh;
       overflow-x: hidden;
-      user-select: none;
+      user-sct: none;
     }
 
     .hidden { display: none !important; }
@@ -189,7 +189,7 @@
       transition: transform 0.2s, border-color 0.2s;
     }
 
-    .fire-card.selected { border-color: var(--primary); box-shadow: 0 0 15px rgba(243, 156, 18, 0.6); }
+    .fire-card.scted { border-color: var(--primary); box-shadow: 0 0 15px rgba(243, 156, 18, 0.6); }
     .fire-card.matched-correct { 
       border-color: var(--correct); 
       background: #144523; 
@@ -280,7 +280,7 @@
     }
     .ext-card:hover { transform: translateY(-4px); }
 
-    .ext-card.selected {
+    .ext-card.scted {
       border-color: var(--primary);
       background: #1f3a52;
       box-shadow: 0 0 25px rgba(243, 156, 18, 0.9);
@@ -303,7 +303,7 @@
     }
 
     .ext-svg { width: 60px; height: 90px; margin-bottom: 8px; transition: transform 0.2s; }
-    .ext-card.selected .ext-svg { transform: rotate(-8deg); }
+    .ext-card.scted .ext-svg { transform: rotate(-8deg); }
 
     .ext-name { font-size: 0.9rem; font-weight: bold; text-align: center; color: #fff; }
 
@@ -393,7 +393,7 @@
   </div>
 
   <div id="lang-screen">
-    <div class="lang-title">🧯 請揀選語言 / Select Language</div>
+    <div class="lang-title">🧯 請揀選語言 / Sct Language</div>
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
@@ -559,7 +559,7 @@
         selectExtFirst: "⚠️ Please pick an extinguisher from below first!",
         wrongMatch: "💥 Incorrect Match! This extinguisher is unsuitable for this fire type.",
         expWaterOk: "✅ Fire Extinguished! Water cools solid fires like wood and paper.",
-        expWaterElectric: "💥 ELECTROCUTION! Water conducts electricity!",
+        expWaterElectric: "💥 Electrocution! Water conducts electricity!",
         expWaterLiquid: "💥 Explosion! Water splashes boiling oil and spreads fire!",
         expCO2Ok: "✅ Fire Extinguished! CO2 is non-conductive, ideal for electrical fires.",
         expFoamOk: "✅ Fire Extinguished! Foam smothers flammable liquid fires.",
@@ -579,8 +579,8 @@ ur: {
       fireA: "کلاس A: لکڑی / کاغذ / Class A: Wood / Paper", fireADesc: "ٹھوس شعلہ گیر مواد / Solid Combustible Fires",
       fireB: "کلاس B: تھنر / پینٹ / ڈیزل / Class B: Thinner / Paint / Diesel", fireBDesc: "قابل اشتعال مائع آگ / Flammable Liquid Fires",
       fireE: "بجلی کی آگ: سوئچ بورڈ / Electrical Fire: Switchboard", fireEDesc: "برقی الات کی آگ / Live Electrical Equipment",
-      extWater: "پانی (Water) / Water Extinguisher", extFoam: "فوم (Foam) / Foam Extinguisher",
-      extCO2: "کاربن ڈائی آکسائیڈ (CO2) / CO2 Extinguisher", extPowder: "خشک پاؤڈر (Dry Powder) / ABC Dry Powder",
+      extWater: "پانی Water Extinguisher", extFoam: "فوم Foam Extinguisher",
+      extCO2: "کاربن ڈائی آکسائیڈ CO2 Extinguisher", extPowder: "خشک پاؤڈر ABC Dry Powder",
       extinguished: "بجھ گیا / Extinguished", reset: "🔄 دوبارہ شروع / Restart (Shuffle)", retry: "🔄 دوبارہ کوشش کریں / Try Again", selectedTip: "منتخب کردہ: / Picked: ",
       selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں! / Please pick an extinguisher from below first!",
       wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",

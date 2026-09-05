@@ -529,7 +529,7 @@
         fireE: "電器火警：配電箱 / 發電機", fireEDesc: "通電設備火警",
         extWater: "水劑滅火筒 (Water)", extFoam: "泡沫滅火筒 (Foam)",
         extCO2: "二氧化碳滅火筒 (CO2)", extPowder: "ABC 乾粉滅火筒 (Dry Powder)",
-        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", selectedTip: "已經拎起：",
+        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", selectedTip: "拎起左：",
         selectExtFirst: "⚠️ 請先喺下面點擊拎起一款滅火筒先！",
         wrongMatch: "💥 配錯啦！呢款滅火筒唔適用於呢類火警，無法有效滅火。",
         expWaterOk: "✅ 成功滅火！水劑能夠有效降溫冷卻，最適合用於木材同紙張火警。",
@@ -542,7 +542,7 @@
         winTitle: "🎉 恭喜通關！", winTime: "⏱️ 完成時間：",
         winMsg: "你已經成功為所有火警類型配對正確嘅滅火筒，安全意識極高！",
         newRecord: "🏆 創下全新最佳紀錄！",
-        failTitle: "❌ 挑戰失敗！", failMsg: "⚠️ 生命冇得返轉頭！選擇錯誤導致火勢失控！請複習後再試一次。"
+        failTitle: "❌ 挑戰失敗！", failMsg: "⚠️ 生命冇take Two！選擇錯誤導致火勢失控！請複習後再試一次。"
       },
       en: {
         langCode: 'en-US',
@@ -1155,22 +1155,24 @@
 
       updateLanguageUI();
       startTimer();
- }
+   }
       function safeSpeakAndStart(langCode, speakTextStr) {
-    try {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(speakTextStr);
-            utterance.lang = (langCode === 'ur') ? 'ur-PK' : langCode;
-            window.speechSynthesis.speak(utterance);
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        let utterance = new SpeechSynthesisUtterance(speakTextStr);
+        utterance.lang = 'en-US'; // 強制使用英文語音確保裝置都有支援
+        utterance.rate = 1.0;
+        
+        // 立即執行發音
+        window.speechSynthesis.speak(utterance);
+    }
+    
+    // 延遲一點點時間再切換畫面，讓瀏覽器有空檔把聲音唸出來
+    setTimeout(function() {
+        if (typeof startGame === 'function') {
+            startGame(langCode);
         }
-    } catch (e) {
-        console.log("Speech error ignored", e);
-    }
-    // 無論語音成功與否，一定執行換頁進入遊戲
-    if (typeof startGame === 'function') {
-        startGame(langCode);
-    }
+    }, 300);
 }
   </script>
 </body>

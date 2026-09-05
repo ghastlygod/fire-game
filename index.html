@@ -397,7 +397,7 @@
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="speakText('Urdu', 'ur-PK'); startGame('ur');" aria-label="Urdu language">اردو (Urdu)</button>
       <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
     </div>
   </div>
@@ -1155,8 +1155,26 @@
 
       updateLanguageUI();
       startTimer();
-   }
-
+      function speakText(text, lang) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        let utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        
+        let voices = window.speechSynthesis.getVoices();
+        // 精準尋找烏爾都語（Pakistan）或一般烏爾都語語音
+        let targetVoice = voices.find(v => v.lang === 'ur-PK' || v.lang.startsWith('ur'));
+        if (targetVoice) {
+            utterance.voice = targetVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
+}
+// 確保瀏覽器載入完語音清單
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+}
   </script>
 </body>
 </html>

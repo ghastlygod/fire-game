@@ -397,7 +397,7 @@
     <div class="lang-grid">
       <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
       <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="safeSpeakAndStart('ur', 'Urdu game started');" aria-label="Urdu language">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
       <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
     </div>
   </div>
@@ -1155,25 +1155,7 @@
 
       updateLanguageUI();
       startTimer();
-   }
-      function safeSpeakAndStart(langCode, speakTextStr) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        let utterance = new SpeechSynthesisUtterance(speakTextStr);
-        utterance.lang = 'en-US'; // 強制使用英文語音確保裝置都有支援
-        utterance.rate = 1.0;
-        
-        // 立即執行發音
-        window.speechSynthesis.speak(utterance);
-    }
-    
-    // 延遲一點點時間再切換畫面，讓瀏覽器有空檔把聲音唸出來
-    setTimeout(function() {
-        if (typeof startGame === 'function') {
-            startGame(langCode);
-        }
-    }, 300);
-}
+
   </script>
 </body>
 </html>

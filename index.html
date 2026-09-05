@@ -288,13 +288,12 @@
       animation: pickupFloat 1.6s infinite ease-in-out alternate;
     }
 
-    .ext-card.disabled-ext {
-      opacity: 0.35;
-      filter: grayscale(100%);
-      pointer-events: none;
-      transform: none !important;
-      animation: none !important;
-      border-color: #555 !important;
+.ext-card.scted {
+      border-color: var(--primary);
+      background: #1f3a52;
+      box-shadow: 0 0 25px rgba(243, 156, 18, 0.9);
+      transform: translateY(-14px) scale(1.08);
+      animation: pickupFloat 1.6s infinite ease-in-out alternate;
     }
 
     @keyframes pickupFloat {

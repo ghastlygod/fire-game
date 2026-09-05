@@ -928,6 +928,11 @@
       displayBestRecord();
       updateLanguageUI();
       resetGame();
+      if ('speechSynthesis' in window) {
+        let utterance = new SpeechSynthesisUtterance("Game started in " + lang);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+    }
     }
 
     function showLangScreen() {

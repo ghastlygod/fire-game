@@ -115,7 +115,6 @@
       white-space: nowrap;
     }
 
-    /* 首頁排位版與語言選擇區塊配置 */
     #lang-screen {
       display: flex;
       flex-direction: column;
@@ -167,7 +166,6 @@
     }
     .lang-btn:hover { background: var(--primary); color: #000; transform: scale(1.03); }
 
-    /* 排行榜表格樣式 */
     .leaderboard-container {
       flex: 1;
       display: flex;
@@ -382,6 +380,21 @@
       transform: translateY(-14px) scale(1.08);
       animation: pickupFloat 1.6s infinite ease-in-out alternate;
     }
+
+    .ext-card.disabled-ext {
+      background: rgba(44, 62, 80, 0.4);
+      border-color: #4a5568 !important;
+      opacity: 0.4;
+      filter: grayscale(100%);
+      cursor: not-allowed;
+      pointer-events: none;
+      transform: none !important;
+      box-shadow: none !important;
+      animation: none !important;
+    }
+    .ext-card.disabled-ext .ext-svg {
+      filter: grayscale(100%);
+    }
     
     @keyframes pickupFloat {
       0% { transform: translateY(-14px) scale(1.08); }
@@ -531,6 +544,7 @@
       <div class="hud-group">
         <div class="badge best-badge" aria-label="最佳紀錄">🏆 <span id="best-display">--:--</span></div>
         <div class="badge timer-badge" aria-label="目前用時">⏱️ <span id="timer-display">00:00</span></div>
+        <!-- 預設為重複使用模式 (active 樣式代表允許重複) -->
         <button class="icon-btn active" id="single-use-toggle-btn" onclick="toggleSingleUse()" aria-label="切換單次或重複使用模式">🔄 允許重複</button>
         <button class="icon-btn active" id="tts-toggle-btn" onclick="toggleTTS()" aria-label="切換語音朗讀功能">🔊 語音</button>
         <button class="icon-btn" onclick="showLangScreen()" aria-label="切換語言設定">🌐 語言</button>
@@ -752,8 +766,8 @@
         extinguished: "बुझ गया", reset: "🔄 रीसेट करें", retry: "🔄 पुनः प्रयास करें", saveScore: "💾 स्कोर सहेजें", selectedTip: "चयनित: ",
         selectExtFirst: "⚠️ कृपया पहले नीचे से एक अग्निशामक चुनें!",
         wrongMatch: "💥 गलत मिलान! यह अग्निशामक इस प्रकार की आग के लिए उपयुक्त नहीं है।",
-        expWaterOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें।",
-        expFoamAOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें।",
+        expWaterOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें。",
+        expFoamAOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें。",
         expWaterElectric: "💥 खतरनाक! पानी बिजली का संवाहक है!",
         expWaterLiquid: "💥 खतरनाक! पानी से तेल की आग फैल सकती है!",
         expCO2Ok: "✅ आग बुझ गई! आवेदन: यथासंभव आग के निचले हिस्से पर स्प्रे करें。",
@@ -774,8 +788,8 @@
     let isAnimating = false;
     let matchedCount = 0;
     let ttsEnabled = true;
-    let singleUseEnabled = false;
-    let modalState = 'win'; // 'win' 或 'fail'
+    let singleUseEnabled = false; // ★ 預設改為允許重複使用 (false)
+    let modalState = 'win';
 
     const correctMatches = {
       water: ['water', 'foam', 'powder'],
@@ -990,7 +1004,6 @@
       }
     }
 
-    // 排行榜功能邏輯
     function getLeaderboard() {
       try {
         const data = localStorage.getItem(CONFIG.leaderboardKey);
@@ -1021,7 +1034,6 @@
         return;
       }
 
-      // 顯示最佳紀錄於遊戲介面
       document.getElementById('best-display').textContent = formatTime(lb[0].time);
 
       lb.forEach((entry, index) => {
@@ -1048,15 +1060,9 @@
     function addScoreToLeaderboard(name, time) {
       let lb = getLeaderboard();
       lb.push({ name: name.trim() || '匿名員工', time: time });
-      // 依時間由小到大排序 (秒數越少越前)
       lb.sort((a, b) => a.time - b.time);
-      // 只保留前 10 名
       if (lb.length > 10) lb = lb.slice(0, 10);
       saveLeaderboard(lb);
-      updateLeaderboardUI();
-    }
-
-    function displayBestRecord() {
       updateLeaderboardUI();
     }
 
@@ -1275,7 +1281,6 @@
           if (selectedExt === 'foam' && targetType === 'co2') expMsg = t.expFoamElectric;
 
           stopTimer();
-          
           showFailModal(expMsg);
 
           setTimeout(() => {
@@ -1299,7 +1304,6 @@
       document.getElementById('modalTime').style.display = "block";
       document.getElementById('modalMsg').innerHTML = t.winMsg;
       
-      // 顯示輸入框供玩家輸入姓名
       document.getElementById('inputSection').style.display = "block";
       document.getElementById('playerNameInput').value = "";
       document.getElementById('modalBtn').textContent = t.saveScore;
@@ -1319,7 +1323,6 @@
       const modalMsgContent = `<b>${errorReason}</b><br><br>${t.failMsg}`;
       document.getElementById('modalMsg').innerHTML = modalMsgContent;
       
-      // 隱藏輸入框
       document.getElementById('inputSection').style.display = "none";
       document.getElementById('modalBtn').textContent = t.retry;
 
@@ -1332,7 +1335,7 @@
         const nameInput = document.getElementById('playerNameInput').value;
         addScoreToLeaderboard(nameInput, secondsElapsed);
         closeModal();
-        showLangScreen(); // 返回主頁面檢視排行榜
+        showLangScreen();
       } else {
         closeModal();
         resetGame();
@@ -1376,7 +1379,6 @@
       startTimer();
     }
 
-    // 初始化載入排行榜
     updateLeaderboardUI();
   </script>
 </body>

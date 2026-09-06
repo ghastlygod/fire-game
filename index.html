@@ -531,7 +531,6 @@
     <button class="reset-btn" id="ui-reset" onclick="resetGame()" aria-label="重新開始遊戲並隨機洗牌">🔄 重新開始 (洗牌)</button>
   </div>
 
-  <!-- 影片播放彈窗 -->
   <div class="modal-overlay" id="videoModal">
     <div class="modal-box" style="background: #000; padding: 10px; max-width: 500px;">
       <video id="clipVideo" width="100%" style="border-radius: 10px; display: block;" playsinline></video>
@@ -603,7 +602,6 @@
         expWaterLiquid: "💥 Explosion! Water splashes boiling oil and spreads fire!",
         expCO2Ok: "✅ Fire Extinguished! Application: Aim as close to the base of the fire as possible. CO2 is non-conductive, ideal for electrical fires.",
         expFoamOk: "✅ Fire Extinguished! Application: Direct foam from top to bottom to cover the fire source.",
-        expFoamElectric: "💥 Danger! Foam contains water and conducts electricity!",
         expPowderOk: "✅ Fire Extinguished! Application: Aim directly at the base of the fire. ABC Powder smothers fire effectively.",
         winTitle: "🎉 Stage Cleared!", winTime: "⏱️ Time Taken: ",
         winMsg: "You correctly matched all extinguishers and application methods. Excellent safety awareness!",
@@ -626,11 +624,10 @@
         wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",
         expWaterOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base of the fire.",
         expFoamAOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ سکتا ہے / Electrocution! Water conducts electricity!",
+        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ सकता है / Electrocution! Water conducts electricity!",
         expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے / Explosion! Water splashes boiling oil and spreads fire!",
         expCO2Ok: "✅ آگ بجھ گئی! طریقہ: جتنا ہو سکے آگ کے نچلے حصے پر نشانہ بنائیں۔ / Fire Extinguished! Aim towards the base.",
         expFoamOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expFoamElectric: "💥 خطرناک! فوم میں پانی ہوتا ہے / Danger! Foam contains water and conducts electricity!",
         expPowderOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base.",
         winTitle: "🎉 مبارک ہو! / Stage Cleared!", winTime: "⏱️ کل وقت: / Time Taken: ",
         winMsg: "آپ نے تمام آگ بجھانے والے آلات کا صحیح انتخاب کیا ہے! / You correctly matched all extinguishers.",
@@ -741,10 +738,17 @@
     }
 
     let currentAudioFallback = null;
-    function speakText(text) {
-      if (!ttsEnabled) return;
+
+    function speakText(text, onComplete = null) {
+      if (!ttsEnabled) {
+        if (onComplete) onComplete();
+        return;
+      }
       const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
-      if (!cleanText) return;
+      if (!cleanText) {
+        if (onComplete) onComplete();
+        return;
+      }
 
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       if (currentAudioFallback) {
@@ -756,16 +760,41 @@
       let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'yue-hk' || v.lang.toLowerCase().startsWith('yue')) ||
                          systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'zh-hk');
 
-      if (matchedVoice) {
+      if (matchedVoice && 'speechSynthesis' in window) {
         const msg = new SpeechSynthesisUtterance(cleanText);
         msg.voice = matchedVoice;
         msg.lang = matchedVoice.lang;
         msg.rate = CONFIG.ttsRate;
+        
+        let finished = false;
+        const triggerEnd = () => {
+          if (finished) return;
+          finished = true;
+          if (onComplete) onComplete();
+        };
+
+        msg.onend = triggerEnd;
+        msg.onerror = triggerEnd;
+        
         window.speechSynthesis.speak(msg);
+        setTimeout(triggerEnd, (cleanText.length * 350) + 2000);
       } else {
         const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=yue&client=tw-ob`;
         currentAudioFallback = new Audio(ttsUrl);
-        currentAudioFallback.play().catch(() => {});
+        
+        let finished = false;
+        const triggerEnd = () => {
+          if (finished) return;
+          finished = true;
+          if (onComplete) onComplete();
+        };
+
+        currentAudioFallback.onended = triggerEnd;
+        currentAudioFallback.onerror = triggerEnd;
+        
+        currentAudioFallback.play().catch(() => {
+          triggerEnd();
+        });
       }
     }
 
@@ -945,7 +974,9 @@
       const sb = document.getElementById('status-bar');
       sb.textContent = msg;
       sb.className = `status-bar ${stateClass}`;
-      if (speak) speakText(msg);
+      if (speak) {
+        speakText(msg);
+      }
     }
 
     function selectExt(element) {
@@ -967,9 +998,7 @@
       setStatus(`✊ ${i18n[currentLang].selectedTip} ${extNames[selectedExt]}`, 'info', true);
     }
 
-    // 根據結果、火災類型與滅火筒獲取影片檔名
     function getResultVideoFilename(result, targetType, extType) {
-      // targetType: water -> A, foam -> B, co2 -> E
       let fireLetter = '';
       if (targetType === 'water') fireLetter = 'A';
       else if (targetType === 'foam') fireLetter = 'B';
@@ -981,7 +1010,6 @@
       return `${result}_${fireLetter}-${extType}.mp4`;
     }
 
-    // 播放 5 秒短片
     function playClipVideo(filename, onEndedCallback) {
       const videoModal = document.getElementById('videoModal');
       const videoEl = document.getElementById('clipVideo');
@@ -990,12 +1018,10 @@
       videoModal.classList.add('active');
       
       videoEl.play().catch(() => {
-        // 若瀏覽器封鎖自動播放或檔案不存在，直接執行 callback
         videoModal.classList.remove('active');
         onEndedCallback();
       });
 
-      // 播放完畢或超時 5 秒後關閉影片並執行後續邏輯
       let finished = false;
       const finish = () => {
         if (finished) return;
@@ -1007,7 +1033,7 @@
       };
 
       videoEl.onended = finish;
-      setTimeout(finish, 5200); // 確保 5 秒短片播完
+      setTimeout(finish, 5200);
     }
 
     function selectZone(zoneElement) {
@@ -1034,7 +1060,6 @@
 
       const videoFilename = getResultVideoFilename(isCorrect ? 'good' : 'bad', targetType, selectedExt);
 
-      // 播放對應短片（無論成功或失敗，失敗彈窗前播片）
       playClipVideo(videoFilename, () => {
         if (isCorrect) {
           playSound('correct');
@@ -1077,9 +1102,9 @@
 
             if (matchedCount >= 3) {
               stopTimer();
-              setTimeout(() => showWinModal(), 600);
+              showWinModal();
             }
-          }, 700);
+          }, 300);
 
         } else {
           playSound('wrong');
@@ -1093,14 +1118,14 @@
           if (selectedExt === 'water' && targetType === 'foam') expMsg = t.expWaterLiquid;
           if (selectedExt === 'foam' && targetType === 'co2') expMsg = t.expFoamElectric;
 
-          setStatus(expMsg, 'error', false);
           stopTimer();
+          
+          showFailModal(expMsg);
 
           setTimeout(() => {
             zoneElement.classList.remove('shake-effect');
             isAnimating = false;
-            showFailModal(expMsg);
-          }, 850);
+          }, 400);
         }
       });
     }
@@ -1122,8 +1147,10 @@
       document.getElementById('modalMsg').innerHTML = finalMsg;
       document.getElementById('modalBtn').textContent = t.retry;
 
-      speakText(t.winTitle + " " + (isNewRecord ? t.newRecord : ""));
       document.getElementById('resultModal').classList.add('active');
+
+      const winSpeechText = t.winTitle + " " + (isNewRecord ? t.newRecord : "") + " " + t.winMsg;
+      speakText(winSpeechText);
     }
 
     function showFailModal(errorReason) {
@@ -1132,11 +1159,15 @@
       document.getElementById('modalIcon').textContent = "💥";
       document.getElementById('modalTitle').textContent = t.failTitle;
       document.getElementById('modalTime').style.display = "none";
-      document.getElementById('modalMsg').innerHTML = `<b>${errorReason}</b><br><br>${t.failMsg}`;
+      
+      const modalMsgContent = `<b>${errorReason}</b><br><br>${t.failMsg}`;
+      document.getElementById('modalMsg').innerHTML = modalMsgContent;
       document.getElementById('modalBtn').textContent = t.retry;
 
       document.getElementById('resultModal').classList.add('active');
-      speakText(`${t.failTitle} ${errorReason} ${t.failMsg}`);
+
+      const failSpeechText = `${t.failTitle} ${errorReason} ${t.failMsg}`;
+      speakText(failSpeechText);
     }
 
     function closeModal() {

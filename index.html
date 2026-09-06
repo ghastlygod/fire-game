@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>義合工程 10/WSD/24 - 滅火筒對對碰</title>
+  <title>義合工程 10/WSD/24 - 滅火筒對對碰 (中秋版)</title>
   <style>
     :root {
       --primary: #f39c12;
-      --bg-dark: #1e272e;
-      --card-bg: #2c3e50;
+      --bg-dark: #0b1d3a;
+      --card-bg: #1b2a47;
       --text-light: #ecf0f1;
       --correct: #2ecc71;
       --wrong: #e74c3c;
     }
 
+    /* 中秋地盤夜景背景設定 */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-dark);
+      background: linear-gradient(135deg, #0b1d3a 0%, #1b2a47 50%, #2c163b 100%);
+      background-attachment: fixed;
       color: var(--text-light);
       margin: 0;
       padding: 15px;
@@ -25,7 +27,22 @@
       align-items: center;
       min-height: 100vh;
       overflow-x: hidden;
-      user-sct: none;
+      position: relative;
+    }
+
+    /* 加入滿月與燈籠光暈效果 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 30px;
+      right: 50px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 230, 150, 0.9) 0%, rgba(255, 180, 50, 0.4) 60%, transparent 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 40px rgba(255, 200, 100, 0.6);
+      z-index: -1;
+      pointer-events: none;
     }
 
     .hidden { display: none !important; }
@@ -279,24 +296,8 @@
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .ext-card:hover { transform: translateY(-4px); }
-
-    .ext-card.scted {
-      border-color: var(--primary);
-      background: #1f3a52;
-      box-shadow: 0 0 25px rgba(243, 156, 18, 0.9);
-      transform: translateY(-14px) scale(1.08);
-      animation: pickupFloat 1.6s infinite ease-in-out alternate;
-    }
-
-.ext-card.scted {
-      border-color: var(--primary);
-      background: #1f3a52;
-      box-shadow: 0 0 25px rgba(243, 156, 18, 0.9);
-      transform: translateY(-14px) scale(1.08);
-      animation: pickupFloat 1.6s infinite ease-in-out alternate;
-    }
     
-.ext-card.selected {
+    .ext-card.selected {
       border: 3px solid #00ffcc !important;
       background: #1a4d43;
       box-shadow: 0 0 30px rgba(0, 255, 204, 0.9);
@@ -310,7 +311,7 @@
     }
 
     .ext-svg { width: 60px; height: 90px; margin-bottom: 8px; transition: transform 0.2s; }
-    .ext-card.scted .ext-svg { transform: rotate(-8deg); }
+    .ext-card.selected .ext-svg { transform: rotate(-8deg); }
 
     .ext-name { font-size: 0.9rem; font-weight: bold; text-align: center; color: #fff; }
 
@@ -390,7 +391,7 @@
 
   <div class="company-header">
     <div class="logo-wrapper">
-      <img src="YEE HOP Logo_2.jpg" alt="義合工程 Logo" style="max-width: 200px; height: auto;">
+      <img src="YEE HOP Logo_2.jpg" alt="義合工程 Logo" style="max-width: 200px; height: auto;" onerror="this.style.display='none'; document.getElementById('brand-fallback').classList.remove('hidden');">
       <div id="brand-fallback" class="logo-fallback hidden">
         <span class="zh-text">義合工程</span>
         <span class="en-text"><br>ENGINEERING</span>
@@ -430,7 +431,7 @@
         <div class="fire-icon-wrapper">
           <div class="fire-icon flame-active" id="icon-water">🔥🪵📦</div>
         </div>
-        <div class="fire-title" id="ui-fire-a">A類：木材 / 廢紙 / 竹棚</div>
+        <div class="fire-title" id="ui-fire-a">A類：木材 / 廢紙 / 物料存放區</div>
         <div class="fire-desc" id="ui-fire-a-desc">固體可燃物火警</div>
         <div class="drop-slot" id="slot-water">---</div>
       </div>
@@ -526,17 +527,17 @@
 
     const i18n = {
       yue: {
-        langCode: 'yue-HK', // 強制指定粵語 (Yue / Cantonese)
+        langCode: 'yue-HK',
         contract: "合約編號: 10/WSD/24",
         title: "🧯 地盤消防安全：滅火筒對對碰",
         instructions: "💡 操作指引：先喺下面點擊「滅火筒」，然後再點擊對應嘅「火災場景」。",
         selectTitle: "👇 請揀選滅火筒：",
-        fireA: "A類：木材 / 廢紙 / 竹棚", fireADesc: "固體可燃物火警",
+        fireA: "A類：木材 / 廢紙 / 物料存放區", fireADesc: "固體可燃物火警",
         fireB: "B類：天拿水 / 油漆 / 柴油", fireBDesc: "易燃液體火警",
         fireE: "電器火警：配電箱 / 發電機", fireEDesc: "通電設備火警",
         extWater: "水劑滅火筒 (Water)", extFoam: "泡沫滅火筒 (Foam)",
         extCO2: "二氧化碳滅火筒 (CO2)", extPowder: "ABC 乾粉滅火筒 (Dry Powder)",
-        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", selectedTip: "拎起左：",
+        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", selectedTip: "拎起咗：",
         selectExtFirst: "⚠️ 請先喺下面點擊拎起一款滅火筒先！",
         wrongMatch: "💥 配錯啦！呢款滅火筒唔適用於呢類火警，無法有效滅火。",
         expWaterOk: "✅ 成功滅火！水劑能夠有效降溫冷卻，最適合用於木材同紙張火警。",
@@ -546,8 +547,8 @@
         expFoamOk: "✅ 成功滅火！泡沫可以形成隔氧層覆蓋液體表面，有效撲滅油火。",
         expFoamElectric: "💥 觸電危險！泡沫含有水分具備導電性，嚴禁用喺電器火警！",
         expPowderOk: "✅ 成功滅火！ABC 乾粉屬於多用途型，能夠有效撲滅各類火源。",
-        winTitle: "🎉 恭喜通關！", winTime: "⏱️ 完成時間：",
-        winMsg: "你已經成功為所有火警類型配對正確嘅滅火筒，安全意識極高！",
+        winTitle: "🎉 中秋追月慶團圓，平安防火第一位！", winTime: "⏱️ 完成時間：",
+        winMsg: "你已經成功為所有火警類型配對正確嘅滅火筒，中秋平安，安全意識極高！",
         newRecord: "🏆 創下全新最佳紀錄！",
         failTitle: "❌ 挑戰失敗！", failMsg: "⚠️ 生命冇take Two！選擇錯誤導致火勢失控！請複習後再試一次。"
       },
@@ -557,7 +558,7 @@
         title: "🧯 Site Safety: Fire Extinguisher Match",
         instructions: "💡 Instructions: Pick an extinguisher below, then tap the target fire.",
         selectTitle: "👇 Select Extinguisher:",
-        fireA: "Class A: Wood / Paper", fireADesc: "Solid Combustible Fires",
+        fireA: "Class A: Wood / Paper / Storage Area", fireADesc: "Solid Combustible Fires",
         fireB: "Class B: Thinner / Paint / Diesel", fireBDesc: "Flammable Liquid Fires",
         fireE: "Electrical Fire: Switchboard", fireEDesc: "Live Electrical Equipment",
         extWater: "Water Extinguisher", extFoam: "Foam Extinguisher",
@@ -577,39 +578,39 @@
         newRecord: "🏆 New Best Record Created!",
         failTitle: "❌ Challenge Failed!", failMsg: "⚠️ Incorrect choice caused fire to spread! Please review safety instructions."
       },
-ur: {
-      langCode: 'ur-PK',
-      contract: "Contract No.: 10/WSD/24",
-      title: "🧯 سائٹ کی حفاظت: آگ بجھانے والا میچ / Site Safety: Fire Extinguisher Match",
-      instructions: "💡 طریقہ: نیچے سے آگ بجھانے والا آلہ منتخب کریں، پھر آگ پر ٹیپ کریں۔ / Instructions: Pick an extinguisher below, then tap the target fire.",
-      selectTitle: "👇 سلنڈر منتخب کریں / Select Extinguisher:",
-      fireA: "کلاس A: لکڑی / کاغذ / Class A: Wood / Paper", fireADesc: "ٹھوس شعلہ گیر مواد / Solid Combustible Fires",
-      fireB: "کلاس B: تھنر / پینٹ / ڈیزل / Class B: Thinner / Paint / Diesel", fireBDesc: "قابل اشتعال مائع آگ / Flammable Liquid Fires",
-      fireE: "بجلی کی آگ: سوئچ بورڈ / Electrical Fire: Switchboard", fireEDesc: "برقی الات کی آگ / Live Electrical Equipment",
-      extWater: "پانی Water Extinguisher", extFoam: "فوم Foam Extinguisher",
-      extCO2: "کاربن ڈائی آکسائیڈ CO2 Extinguisher", extPowder: "خشک پاؤڈر ABC Dry Powder",
-      extinguished: "بجھ گیا / Extinguished", reset: "🔄 دوبارہ شروع / Restart (Shuffle)", retry: "🔄 دوبارہ کوشش کریں / Try Again", selectedTip: "منتخب کردہ: / Picked: ",
-      selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں! / Please pick an extinguisher from below first!",
-      wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",
-      expWaterOk: "✅ آگ بجھ گئی! پانی لکڑی اور کاغذ کی آگ کے لیے بہترین ہے۔ / Fire Extinguished! Water cools solid fires like wood and paper.",
-      expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ سکتا ہے / Electroduction! Water conducts electricity!",
-      expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے / Explosion! Water splashes boiling oil and spreads fire!",
-      expCO2Ok: "✅ آگ بجھ گئی! CO2 کے آلات کے لیے محفوظ ہے۔ / Fire Extinguished! CO2 is non-conductive, ideal for electrical fires.",
-      expFoamOk: "✅ آگ بجھ گئی! فوم تیل کی آگ بجھانے کے لیے بہترین ہے۔ / Fire Extinguished! Foam smothers flammable liquid fires.",
-      expFoamElectric: "💥 خطرناک! فوم میں پانی ہوتا ہے / Danger! Foam contains water and conducts electricity!",
-      expPowderOk: "✅ آگ بجھ گئی! خشک پاؤڈر مختلف آگ پر کام کرتا ہے۔ / Fire Extinguished! ABC Powder smothers fire effectively.",
-      winTitle: "🎉 مبارک ہو! / Stage Cleared!", winTime: "⏱️ کل وقت: / Time Taken: ",
-      winMsg: "آپ نے تمام آگ بجھانے والے آلات کا صحیح انتخاب کیا ہے! / You correctly matched all extinguishers. Excellent safety awareness!",
-      newRecord: "🏆 نیا بہترین ریکارڈ! / New Best Record Created!",
-      failTitle: "❌ چیلنج ناکام / Challenge Failed!", failMsg: "⚠️ غلط انتخاب! براہ کرم دوبارہ کوشش کریں۔ / Incorrect choice caused fire to spread!"
-    },
+      ur: {
+        langCode: 'ur-PK',
+        contract: "Contract No.: 10/WSD/24",
+        title: "🧯 سائٹ کی حفاظت: آگ بجھانے والا میچ / Site Safety: Fire Extinguisher Match",
+        instructions: "💡 طریقہ: نیچے سے آگ بجھانے والا آلہ منتخب کریں، پھر آگ پر ٹیپ کریں۔ / Instructions: Pick an extinguisher below, then tap the target fire.",
+        selectTitle: "👇 سلنڈر منتخب کریں / Select Extinguisher:",
+        fireA: "کلاس A: لکڑی / کاغذ / مٹیریل سٹوریج / Class A: Wood / Storage", fireADesc: "ٹھوس شعلہ گیر مواد / Solid Combustible Fires",
+        fireB: "کلاس B: تھنر / پینٹ / ڈیزل / Class B: Thinner / Paint / Diesel", fireBDesc: "قابل اشتعال مائع آگ / Flammable Liquid Fires",
+        fireE: "بجلی کی آگ: سوئچ بورڈ / Electrical Fire: Switchboard", fireEDesc: "برقی الات کی آگ / Live Electrical Equipment",
+        extWater: "پانی Water Extinguisher", extFoam: "فوم Foam Extinguisher",
+        extCO2: "کاربن ڈائی آکسائیڈ CO2 Extinguisher", extPowder: "خشک پاؤڈر ABC Dry Powder",
+        extinguished: "بجھ گیا / Extinguished", reset: "🔄 دوبارہ شروع / Restart (Shuffle)", retry: "🔄 دوبارہ کوشش کریں / Try Again", selectedTip: "منتخب کردہ: / Picked: ",
+        selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں! / Please pick an extinguisher from below first!",
+        wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",
+        expWaterOk: "✅ آگ بجھ گئی! پانی لکڑی اور کاغذ کی آگ کے لیے بہترین ہے۔ / Fire Extinguished! Water cools solid fires like wood and paper.",
+        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ سکتا ہے / Electroduction! Water conducts electricity!",
+        expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے / Explosion! Water splashes boiling oil and spreads fire!",
+        expCO2Ok: "✅ آگ بجھ گئی! CO2 کے آلات کے لیے محفوظ ہے۔ / Fire Extinguished! CO2 is non-conductive, ideal for electrical fires.",
+        expFoamOk: "✅ آگ بجھ گئی! فوم تیل کی آگ بجھانے کے لیے بہترین ہے۔ / Fire Extinguished! Foam smothers flammable liquid fires.",
+        expFoamElectric: "💥 خطرناک! فوم میں پانی ہوتا ہے / Danger! Foam contains water and conducts electricity!",
+        expPowderOk: "✅ آگ بجھ گئی! خشک پاؤڈر مختلف آگ پر کام کرتا ہے۔ / Fire Extinguished! ABC Powder smothers fire effectively.",
+        winTitle: "🎉 مبارک ہو! / Stage Cleared!", winTime: "⏱️ کل وقت: / Time Taken: ",
+        winMsg: "آپ نے تمام آگ بجھانے والے آلات کا صحیح انتخاب کیا ہے! / You correctly matched all extinguishers. Excellent safety awareness!",
+        newRecord: "🏆 نیا بہترین ریکارڈ! / New Best Record Created!",
+        failTitle: "❌ چیلنج ناکام / Challenge Failed!", failMsg: "⚠️ غلط انتخاب! براہ کرم دوبارہ کوشش کریں۔ / Incorrect choice caused fire to spread!"
+      },
       hi: {
         langCode: 'hi-IN',
         contract: "अनुबंध संख्या: 10/WSD/24",
         title: "🧯 साइट सुरक्षा: अग्निशामक मिलान खेल",
         instructions: "💡 निर्देश: नीचे दिए गए अग्निशामक को चुनें, फिर संबंधित आग पर टैप करें।",
         selectTitle: "👇 अग्निशामक चुनें:",
-        fireA: "वर्ग A: लकड़ी / कागज", fireADesc: "ठोस ज्वलनशील वस्तुएं",
+        fireA: "वर्ग A: लकड़ी / कागज / सामग्री भंडारण क्षेत्र", fireADesc: "ठोस ज्वलनशील वस्तुएं",
         fireB: "वर्ग B: थिनर / पेंट / डीजल", fireBDesc: "ज्वलंत तरल पदार्थ की आग",
         fireE: "बिजली की आग: स्विचबोर्ड", fireEDesc: "चालू विद्युत उपकरण",
         extWater: "पानी वाला अग्निशामक", extFoam: "फॉर्म वाला अग्निशामक",
@@ -622,7 +623,6 @@ ur: {
         expWaterLiquid: "💥 खतरनाक! पानी से तेल की आग फैल सकती है!",
         expCO2Ok: "✅ आग बुझ गई! CO2 बिजली के उपकरणों के लिए सुरक्षित है।",
         expFoamOk: "✅ आग बुझ गई! फोम तरल की आग को दबा देता है।",
-        expFoamElectric: "💥 खतरनाक! फोम में पानी होता है!",
         expPowderOk: "✅ आग बुझ गई! ABC ड्राई पाउडर विभिन्न प्रकार की आग पर काम करता है।",
         winTitle: "🎉 बधाई हो!", winTime: "⏱️ कुल समय: ",
         winMsg: "आपने सभी अग्निशामकों का सही मिलान किया है!",
@@ -761,9 +761,6 @@ ur: {
 
       if (systemVoices.length === 0) initVoices();
 
-      const targetLang = i18n[currentLang].langCode || 'yue-HK';
-
-      // 嚴格配對粵語聲線 (yue 或 zh-HK)
       let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'yue-hk' || v.lang.toLowerCase().startsWith('yue')) ||
                          systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'zh-hk');
 
@@ -774,9 +771,7 @@ ur: {
         msg.rate = CONFIG.ttsRate;
         window.speechSynthesis.speak(msg);
       } else {
-        // 如果裝置完全沒有內置粵語語音包，利用 Google 語音並強制用粵語參數 (tl=yue)
         const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=yue&client=tw-ob`;
-
         currentAudioFallback = new Audio(ttsUrl);
         currentAudioFallback.play().catch(() => {
           const msg = new SpeechSynthesisUtterance(cleanText);
@@ -1093,7 +1088,7 @@ ur: {
       const isNewRecord = checkAndUpdateBestRecord(secondsElapsed);
 
       document.getElementById('modalBox').className = "modal-box success-modal";
-      document.getElementById('modalIcon').textContent = "🏆";
+      document.getElementById('modalIcon').textContent = "🏮";
       document.getElementById('modalTitle').textContent = t.winTitle;
       document.getElementById('modalTime').textContent = t.winTime + timeStr;
       document.getElementById('modalTime').style.display = "block";

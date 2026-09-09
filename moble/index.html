@@ -2,7 +2,7 @@
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>義合工程 10/WSD/24 - 滅火筒對對碰 (中秋版)</title>
   <style>
     :root {
@@ -14,12 +14,17 @@
       --wrong: #e74c3c;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
       width: 100%;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .game-background {
@@ -39,25 +44,25 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--text-light);
-      padding: 15px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       position: relative;
-      background-color: rgba(11, 29, 58, 0.4);
+      background-color: rgba(11, 29, 58, 0.5);
     }
 
     body::before {
       content: "";
       position: fixed;
-      top: 30px;
-      right: 50px;
-      width: 100px;
-      height: 100px;
+      top: 15px;
+      right: 20px;
+      width: 70px;
+      height: 70px;
       background: radial-gradient(circle, rgba(255, 230, 150, 0.9) 0%, rgba(255, 180, 50, 0.4) 60%, transparent 100%);
       border-radius: 50%;
-      box-shadow: 0 0 40px rgba(255, 200, 100, 0.6);
+      box-shadow: 0 0 30px rgba(255, 200, 100, 0.6);
       z-index: -1;
       pointer-events: none;
     }
@@ -78,39 +83,38 @@
       width: 100%;
       max-width: 850px;
       background: #ffffff;
-      padding: 12px 20px;
-      border-radius: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      gap: 15px;
+      margin-bottom: 8px;
+      gap: 10px;
     }
 
     .logo-wrapper { display: flex; align-items: center; }
-    .company-logo { max-height: 65px; width: auto; object-fit: contain; }
+    .company-logo { max-height: 45px; width: auto; object-fit: contain; }
 
     .logo-fallback {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: #0f2b48;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border-left: 5px solid var(--primary);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border-left: 4px solid var(--primary);
     }
-    .logo-fallback .zh-text { color: #ffffff; font-size: 1.3rem; font-weight: 900; letter-spacing: 1.5px; }
-    .logo-fallback .en-text { color: #f1c40f; font-size: 0.85rem; font-weight: bold; border-left: 1px solid #546e7a; padding-left: 10px; line-height: 1.2; }
+    .logo-fallback .zh-text { color: #ffffff; font-size: 1rem; font-weight: 900; letter-spacing: 1px; }
+    .logo-fallback .en-text { color: #f1c40f; font-size: 0.7rem; font-weight: bold; border-left: 1px solid #546e7a; padding-left: 8px; line-height: 1.1; }
 
     .contract-badge {
       background: #d63031;
       color: #ffffff;
-      padding: 8px 14px;
+      padding: 6px 10px;
       border-radius: 6px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 0.85rem;
       letter-spacing: 0.5px;
       white-space: nowrap;
     }
@@ -120,27 +124,28 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 70vh;
+      min-height: 75vh;
       width: 100%;
       max-width: 500px;
       text-align: center;
+      padding: 0 10px;
     }
 
-    .lang-title { font-size: 1.6rem; color: var(--primary); margin-bottom: 25px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-    .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+    .lang-title { font-size: 1.3rem; color: var(--primary); margin-bottom: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
     .lang-btn {
-      background: rgba(27, 42, 71, 0.9);
+      background: rgba(27, 42, 71, 0.95);
       border: 2px solid var(--primary);
-      border-radius: 12px;
-      padding: 20px 10px;
+      border-radius: 10px;
+      padding: 16px 8px;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1.05rem;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .lang-btn:hover { background: var(--primary); color: #000; transform: scale(1.05); }
+    .lang-btn:active { background: var(--primary); color: #000; transform: scale(0.96); }
 
     .game-container { max-width: 850px; width: 100%; }
 
@@ -148,27 +153,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      background: rgba(17, 24, 39, 0.85);
-      padding: 10px 15px;
-      border-radius: 10px;
+      margin-bottom: 8px;
+      background: rgba(17, 24, 39, 0.9);
+      padding: 8px 10px;
+      border-radius: 8px;
       border: 1px solid #374151;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 6px;
       backdrop-filter: blur(5px);
     }
 
-    h1 { color: var(--primary); font-size: 1.2rem; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    h1 { color: var(--primary); font-size: 1.05rem; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
 
-    .hud-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .hud-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
     .badge {
       background: #000;
       color: #fff;
       font-family: monospace, sans-serif;
-      font-size: 1rem;
-      padding: 4px 8px;
-      border-radius: 6px;
+      font-size: 0.85rem;
+      padding: 3px 6px;
+      border-radius: 4px;
       border: 1px solid #555;
       font-weight: bold;
     }
@@ -179,46 +184,47 @@
       background: #34495e;
       border: 1px solid #7f8c8d;
       color: #fff;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .icon-btn.active { background: var(--primary); color: #000; font-weight: bold; }
 
     .status-bar {
-      background: rgba(52, 73, 94, 0.9);
-      padding: 12px;
+      background: rgba(52, 73, 94, 0.95);
+      padding: 10px;
       border-radius: 8px;
-      margin-bottom: 20px;
-      border-left: 5px solid var(--primary);
-      font-size: 0.95rem;
-      min-height: 24px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--primary);
+      font-size: 0.85rem;
+      min-height: 22px;
       display: flex;
       align-items: center;
       transition: background 0.3s;
       backdrop-filter: blur(5px);
+      line-height: 1.3;
     }
     .status-bar.info { border-left-color: var(--primary); }
-    .status-bar.success { border-left-color: var(--correct); background: rgba(20, 83, 45, 0.9); }
-    .status-bar.error { border-left-color: var(--wrong); background: rgba(127, 29, 29, 0.9); }
+    .status-bar.success { border-left-color: var(--correct); background: rgba(20, 83, 45, 0.95); }
+    .status-bar.error { border-left-color: var(--wrong); background: rgba(127, 29, 29, 0.95); }
 
     .fire-zones {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .fire-card {
-      background: rgba(27, 42, 71, 0.85);
+      background: rgba(15, 28, 48, 0.92);
       backdrop-filter: blur(5px);
       border: 2px dashed #7f8c8d;
-      border-radius: 12px;
-      padding: 15px;
+      border-radius: 10px;
+      padding: 10px;
       text-align: center;
       cursor: pointer;
       position: relative;
@@ -226,10 +232,10 @@
       transition: transform 0.2s, border-color 0.2s;
     }
 
-    .fire-card.scted { border-color: var(--primary); box-shadow: 0 0 15px rgba(243, 156, 18, 0.6); }
+    .fire-card.scted { border-color: var(--primary); box-shadow: 0 0 10px rgba(243, 156, 18, 0.6); }
     .fire-card.matched-correct { 
       border-color: var(--correct); 
-      background: rgba(20, 69, 35, 0.9); 
+      background: rgba(20, 69, 35, 0.92); 
       border-style: solid; 
       pointer-events: none;
     }
@@ -240,37 +246,39 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
-      min-height: 85px;
+      margin-bottom: 4px;
+      min-height: 45px;
     }
 
     .fire-icon {
-      font-size: 2.8rem;
+      font-size: 2rem;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      gap: 5px;
       align-items: center;
+      justify-content: center;
       transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
     .extinguished-badge {
       display: block;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       font-weight: bold;
       color: var(--correct);
-      margin-top: 6px;
+      margin-top: 2px;
       white-space: nowrap;
     }
 
     .flame-active { animation: flameFlicker 1.2s infinite ease-in-out alternate; }
     @keyframes flameFlicker {
-      0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 6px #e74c3c); }
-      100% { transform: scale(1.15) translateY(-4px); filter: drop-shadow(0 0 18px #f1c40f); }
+      0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 4px #e74c3c); }
+      100% { transform: scale(1.1) translateY(-2px); filter: drop-shadow(0 0 12px #f1c40f); }
     }
 
     .extinguish-anim { animation: extinguishShrink 0.8s forwards ease-in-out; }
     @keyframes extinguishShrink {
-      0% { transform: scale(1.5); filter: drop-shadow(0 0 20px #2ecc71); }
-      40% { transform: scale(2.2) rotate(-15deg); filter: drop-shadow(0 0 35px #2ecc71); }
+      0% { transform: scale(1.3); filter: drop-shadow(0 0 15px #2ecc71); }
+      40% { transform: scale(1.8) rotate(-10deg); filter: drop-shadow(0 0 25px #2ecc71); }
       80% { transform: scale(0.3) rotate(10deg); opacity: 0.5; filter: grayscale(80%); }
       100% { transform: scale(0); opacity: 0; filter: grayscale(100%); }
     }
@@ -278,87 +286,87 @@
     .explode-anim { animation: fireExplode 0.8s forwards ease-in-out; }
     @keyframes fireExplode {
       0% { transform: scale(1); }
-      30% { transform: scale(2.5) rotate(10deg); filter: drop-shadow(0 0 40px #ff0000); }
-      60% { transform: scale(2.2) rotate(-10deg); filter: drop-shadow(0 0 50px #ff7675); }
-      100% { transform: scale(1.6); }
+      30% { transform: scale(2) rotate(10deg); filter: drop-shadow(0 0 30px #ff0000); }
+      60% { transform: scale(1.8) rotate(-10deg); filter: drop-shadow(0 0 35px #ff7675); }
+      100% { transform: scale(1.3); }
     }
 
-    .fire-title { font-weight: bold; font-size: 1.05rem; color: #ffeaa7; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); }
-    .fire-desc { font-size: 0.85rem; color: #dfe6e9; margin-top: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
-    .fire-card, .ext-card { background: rgba(15, 28, 48, 0.92); /* 將背景調深、不透明度增加 */ }
+    .fire-title { font-weight: bold; font-size: 0.95rem; color: #ffeaa7; text-shadow: 1px 1px 2px rgba(0,0,0,0.9); }
+    .fire-desc { font-size: 0.75rem; color: #dfe6e9; margin-top: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+    
     .drop-slot {
-      margin-top: 10px;
-      padding: 8px;
+      margin-top: 6px;
+      padding: 4px;
       background: rgba(0,0,0,0.4);
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
       color: #aaa;
     }
 
-    .ext-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    .ext-title { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
 
     .extinguishers {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .ext-card {
-      background: rgba(52, 73, 94, 0.85);
+      background: rgba(15, 28, 48, 0.92);
       backdrop-filter: blur(5px);
       border: 2px solid #7f8c8d;
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 10px;
+      padding: 8px 6px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .ext-card:hover { transform: translateY(-4px); }
+    .ext-card:active { transform: scale(0.96); }
     
     .ext-card.selected {
-      border: 3px solid #00ffcc !important;
+      border: 2px solid #00ffcc !important;
       background: rgba(26, 77, 67, 0.95);
-      box-shadow: 0 0 30px rgba(0, 255, 204, 0.9);
-      transform: translateY(-14px) scale(1.08);
-      animation: pickupFloat 1.6s infinite ease-in-out alternate;
-    }
-    
-    @keyframes pickupFloat {
-      0% { transform: translateY(-14px) scale(1.08); }
-      100% { transform: translateY(-22px) scale(1.12); }
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
+      transform: translateY(-4px) scale(1.03);
     }
 
-    .ext-svg { width: 60px; height: 90px; margin-bottom: 8px; transition: transform 0.2s; }
-    .ext-card.selected .ext-svg { transform: rotate(-8deg); }
+    .ext-card.disabled-ext {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(80%);
+    }
 
-    .ext-name { font-size: 0.9rem; font-weight: bold; text-align: center; color: #fff; }
+    .ext-svg { width: 40px; height: 60px; margin-bottom: 4px; transition: transform 0.2s; }
+    .ext-card.selected .ext-svg { transform: rotate(-5deg); }
+
+    .ext-name { font-size: 0.8rem; font-weight: bold; text-align: center; color: #fff; line-height: 1.2; }
 
     .reset-btn {
       display: block;
-      margin: 15px auto 0;
-      padding: 10px 25px;
+      margin: 8px auto 0;
+      padding: 8px 20px;
       background: var(--primary);
       color: #000;
       border: none;
       border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.9rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .shake-effect {
-      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
       border-color: var(--wrong) !important;
     }
     @keyframes shake {
-      10%, 90% { transform: translate3d(-8px, 0, 0) scale(1.03); }
-      20%, 80% { transform: translate3d(12px, 0, 0) scale(1.05); }
-      30%, 50%, 70% { transform: translate3d(-15px, 0, 0) scale(1.08); }
-      40%, 60% { transform: translate3d(15px, 0, 0) scale(1.05); }
+      10%, 90% { transform: translate3d(-6px, 0, 0) scale(1.02); }
+      20%, 80% { transform: translate3d(8px, 0, 0) scale(1.03); }
+      30%, 50%, 70% { transform: translate3d(-10px, 0, 0) scale(1.05); }
+      40%, 60% { transform: translate3d(10px, 0, 0) scale(1.03); }
     }
 
     .modal-overlay {
@@ -372,38 +380,52 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
+      padding: 15px;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
     .modal-box {
       background: #2c3e50;
-      border-radius: 15px;
-      padding: 30px;
-      max-width: 450px;
-      width: 85%;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .modal-box.success-modal { border-top: 8px solid var(--correct); }
-    .modal-box.fail-modal { border-top: 8px solid var(--wrong); }
+    .modal-box.success-modal { border-top: 6px solid var(--correct); }
+    .modal-box.fail-modal { border-top: 6px solid var(--wrong); }
 
-    .modal-icon { font-size: 4rem; margin-bottom: 10px; }
-    .modal-title { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; }
+    .modal-icon { font-size: 3rem; margin-bottom: 6px; }
+    .modal-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 8px; }
     .modal-box.success-modal .modal-title { color: var(--correct); }
     .modal-box.fail-modal .modal-title { color: var(--wrong); }
 
-    .modal-time { font-size: 1.1rem; color: #f1c40f; font-weight: bold; margin-bottom: 15px; }
-    .modal-msg { font-size: 1rem; color: #ecf0f1; line-height: 1.5; margin-bottom: 25px; }
+    .modal-time { font-size: 1rem; color: #f1c40f; font-weight: bold; margin-bottom: 10px; }
+    .modal-msg { font-size: 0.9rem; color: #ecf0f1; line-height: 1.4; margin-bottom: 18px; text-align: left; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
     
     .modal-btn {
       background: var(--primary);
       color: #000;
       border: none;
-      padding: 12px 30px;
-      border-radius: 8px;
+      padding: 10px 24px;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    /* 橫屏或較大螢幕優化 */
+    @media (min-width: 600px) {
+      body { padding: 15px; }
+      .fire-zones { grid-template-columns: repeat(3, 1fr); }
+      .extinguishers { grid-template-columns: repeat(4, 1fr); }
+      .fire-card { padding: 12px; }
+      .fire-icon-wrapper { min-height: 75px; }
+      .fire-icon { font-size: 2.5rem; flex-direction: column; }
     }
   </style>
 </head>
@@ -414,7 +436,7 @@
 
   <div class="company-header">
     <div class="logo-wrapper">
-      <img src="YEE HOP Logo_2.jpg" alt="義合工程 Logo" style="max-width: 200px; height: auto;" onerror="this.style.display='none'; document.getElementById('brand-fallback').classList.remove('hidden');">
+      <img src="YEE HOP Logo_2.jpg" alt="義合工程 Logo" style="max-height: 40px; width: auto;" onerror="this.style.display='none'; document.getElementById('brand-fallback').classList.remove('hidden');">
       <div id="brand-fallback" class="logo-fallback hidden">
         <span class="zh-text">義合工程</span>
         <span class="en-text"><br>ENGINEERING</span>
@@ -426,10 +448,10 @@
   <div id="lang-screen">
     <div class="lang-title">🧯 請揀選語言 / Select Language</div>
     <div class="lang-grid">
-      <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
-      <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
-      <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
+      <button class="lang-btn" onclick="startGame('yue')">廣東話 (粵語)</button>
+      <button class="lang-btn" onclick="startGame('en')">English</button>
+      <button class="lang-btn" onclick="startGame('ur')">اردو (Urdu)</button>
+      <button class="lang-btn" onclick="startGame('hi')">हिन्दी (Hindi)</button>
     </div>
   </div>
 
@@ -437,11 +459,11 @@
     <div class="status-header">
       <h1 id="ui-title">🧯 滅火筒對對碰</h1>
       <div class="hud-group">
-        <div class="badge best-badge" aria-label="最佳紀錄">🏆 <span id="best-display">--:--</span></div>
-        <div class="badge timer-badge" aria-label="目前用時">⏱️ <span id="timer-display">00:00</span></div>
-        <button class="icon-btn active" id="single-use-toggle-btn" onclick="toggleSingleUse()" aria-label="切換單次或重複使用模式">🔄 允許重複</button>
-        <button class="icon-btn active" id="tts-toggle-btn" onclick="toggleTTS()" aria-label="切換語音朗讀功能">🔊 語音</button>
-        <button class="icon-btn" onclick="showLangScreen()" aria-label="切換語言設定">🌐 語言</button>
+        <div class="badge best-badge">🏆 <span id="best-display">--:--</span></div>
+        <div class="badge timer-badge">⏱️ <span id="timer-display">00:00</span></div>
+        <button class="icon-btn active" id="single-use-toggle-btn" onclick="toggleSingleUse()">🔄 允許重複</button>
+        <button class="icon-btn active" id="tts-toggle-btn" onclick="toggleTTS()">🔊 語音</button>
+        <button class="icon-btn" onclick="showLangScreen()">🌐 語言</button>
       </div>
     </div>
 
@@ -528,12 +550,12 @@
 
     </div>
 
-    <button class="reset-btn" id="ui-reset" onclick="resetGame()" aria-label="重新開始遊戲並隨機洗牌">🔄 重新開始 (洗牌)</button>
+    <button class="reset-btn" id="ui-reset" onclick="resetGame()">🔄 重新開始 (洗牌)</button>
   </div>
 
   <div class="modal-overlay" id="videoModal">
-    <div class="modal-box" style="background: #000; padding: 10px; max-width: 500px; margin: auto; display: flex; justify-content: center; align-items: center;">
-      <video id="clipVideo" style="width: 200%; max-width: 200%; height: auto; border-radius: 10px; display: block;" playsinline></video>
+    <div class="modal-box" style="background: #000; padding: 5px; max-width: 400px; margin: auto; display: flex; justify-content: center; align-items: center;">
+      <video id="clipVideo" style="width: 100%; max-width: 100%; height: auto; border-radius: 8px; display: block;" playsinline></video>
     </div>
   </div>
 
@@ -550,7 +572,7 @@
   <script>
     const CONFIG = {
       ttsRate: 1.1,
-      sprayParticlesCount: 65,
+      sprayParticlesCount: 50,
       storageKey: 'yeehop_fire_best_time'
     };
 
@@ -558,7 +580,7 @@
       yue: {
         langCode: 'yue-HK',
         contract: "合約編號: 10/WSD/24",
-        title: "🧯 地盤消防安全：滅火筒對對碰",
+        title: "🧯 滅火筒對對碰",
         instructions: "💡 操作指引：先喺下面點擊「滅火筒」，然後再點擊對應嘅「火災場景」。",
         selectTitle: "👇 請揀選滅火筒：",
         fireA: "A類：木材 / 廢紙 / 物料存放區", fireADesc: "固體可燃物火警",
@@ -585,10 +607,10 @@
       en: {
         langCode: 'en-US',
         contract: "Contract No.: 10/WSD/24",
-        title: "🧯 Site Safety: Fire Extinguisher Match",
+        title: "🧯 Fire Extinguisher Match",
         instructions: "💡 Instructions: Pick an extinguisher below, then tap the target fire.",
         selectTitle: "👇 Select Extinguisher:",
-        fireA: "Class A: Wood / Paper / Storage Area", fireADesc: "Solid Combustible Fires",
+        fireA: "Class A: Wood / Paper / Storage", fireADesc: "Solid Combustible Fires",
         fireB: "Class B: Thinner / Paint / Diesel", fireBDesc: "Flammable Liquid Fires",
         fireE: "Electrical Fire: Switchboard", fireEDesc: "Live Electrical Equipment",
         extWater: "Water Extinguisher", extFoam: "Foam Extinguisher",
@@ -596,13 +618,13 @@
         extinguished: "Extinguished", reset: "🔄 Restart (Shuffle)", retry: "🔄 Try Again", selectedTip: "Picked: ",
         selectExtFirst: "⚠️ Please pick an extinguisher from below first!",
         wrongMatch: "💥 Incorrect Match! This extinguisher is unsuitable for this fire type.",
-        expWaterOk: "✅ Fire Extinguished! Application: Aim directly at the base of the fire. Water cools solid fires like wood and paper.",
-        expFoamAOk: "✅ Fire Extinguished! Application: Direct foam from top to bottom to cover the fire source.",
+        expWaterOk: "✅ Fire Extinguished! Aim directly at the base of the fire. Water cools solid fires like wood and paper.",
+        expFoamAOk: "✅ Fire Extinguished! Direct foam from top to bottom to cover the fire source.",
         expWaterElectric: "💥 Electrocution! Water conducts electricity!",
         expWaterLiquid: "💥 Explosion! Water splashes boiling oil and spreads fire!",
-        expCO2Ok: "✅ Fire Extinguished! Application: Aim as close to the base of the fire as possible. CO2 is non-conductive, ideal for electrical fires.",
-        expFoamOk: "✅ Fire Extinguished! Application: Direct foam from top to bottom to cover the fire source.",
-        expPowderOk: "✅ Fire Extinguished! Application: Aim directly at the base of the fire. ABC Powder smothers fire effectively.",
+        expCO2Ok: "✅ Fire Extinguished! Aim as close to the base of the fire as possible. CO2 is non-conductive, ideal for electrical fires.",
+        expFoamOk: "✅ Fire Extinguished! Direct foam from top to bottom to cover the fire source.",
+        expPowderOk: "✅ Fire Extinguished! Aim directly at the base of the fire. ABC Powder smothers fire effectively.",
         winTitle: "🎉 Stage Cleared!", winTime: "⏱️ Time Taken: ",
         winMsg: "You correctly matched all extinguishers and application methods. Excellent safety awareness!",
         newRecord: "🏆 New Best Record Created!",
@@ -611,36 +633,36 @@
       ur: {
         langCode: 'ur-PK',
         contract: "Contract No.: 10/WSD/24",
-        title: "🧯 سائٹ کی حفاظت: آگ بجھانے والا میچ / Site Safety: Fire Extinguisher Match",
-        instructions: "💡 طریقہ: نیچے سے آگ بجھانے والا آلہ منتخب کریں، پھر آگ پر ٹیپ کریں۔ / Instructions: Pick an extinguisher below, then tap the target fire.",
-        selectTitle: "👇 سلنڈر منتخب کریں / Select Extinguisher:",
-        fireA: "کلاس A: لکڑی / کاغذ / مٹیریل سٹوریج / Class A: Wood / Storage", fireADesc: "ٹھوس شعلہ گیر مواد / Solid Combustible Fires",
-        fireB: "کلاس B: تھنر / پینٹ / ڈیزل / Class B: Thinner / Paint / Diesel", fireBDesc: "قابل اشتعال مائع آگ / Flammable Liquid Fires",
-        fireE: "بجلی کی آگ: سوئچ بورڈ / Electrical Fire: Switchboard", fireEDesc: "برقی الات کی آگ / Live Electrical Equipment",
+        title: "🧯 آگ بجھانے والا میچ",
+        instructions: "💡 طریقہ: نیچے سے سلنڈر منتخب کریں، پھر آگ پر ٹیپ کریں۔",
+        selectTitle: "👇 سلنڈر منتخب کریں:",
+        fireA: "کلاس A: لکڑی / کاغذ / سٹوریج", fireADesc: "ٹھوس شعلہ گیر مواد",
+        fireB: "کلاس B: تھنر / پینٹ / ڈیزل", fireBDesc: "قابل اشتعال مائع آگ",
+        fireE: "بجلی کی آگ: سوئچ بورڈ", fireEDesc: "برقی الات کی آگ",
         extWater: "پانی Water Extinguisher", extFoam: "فوم Foam Extinguisher",
-        extCO2: "کاربن ڈائی آکسائیڈ CO2 Extinguisher", extPowder: "خشک پاؤڈر ABC Dry Powder",
-        extinguished: "بجھ گیا / Extinguished", reset: "🔄 دوبارہ شروع / Restart (Shuffle)", retry: "🔄 دوبارہ کوشش کریں / Try Again", selectedTip: "منتخب کردہ: / Picked: ",
-        selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں! / Please pick an extinguisher from below first!",
-        wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",
-        expWaterOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base of the fire.",
-        expFoamAOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ सकता है / Electrocution! Water conducts electricity!",
-        expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے / Explosion! Water splashes boiling oil and spreads fire!",
-        expCO2Ok: "✅ آگ بجھ گئی! طریقہ: جتنا ہو سکے آگ کے نچلے حصے پر نشانہ بنائیں۔ / Fire Extinguished! Aim towards the base.",
-        expFoamOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expPowderOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base.",
-        winTitle: "🎉 مبارک ہو! / Stage Cleared!", winTime: "⏱️ کل وقت: / Time Taken: ",
-        winMsg: "آپ نے تمام آگ بجھانے والے آلات کا صحیح انتخاب کیا ہے! / You correctly matched all extinguishers.",
-        newRecord: "🏆 نیا بہترین ریکارڈ! / New Best Record Created!",
-        failTitle: "❌ چیلنج ناکام / Challenge Failed!", failMsg: "⚠️ غلط انتخاب! براہ کرم دوبارہ کوشش کریں۔ / Incorrect choice caused fire to spread!"
+        extCO2: "کاربن ڈائی آکسائیڈ CO2", extPowder: "خشک پاؤڈر ABC Powder",
+        extinguished: "بجھ گیا", reset: "🔄 دوبارہ شروع", retry: "🔄 دوبارہ کوشش", selectedTip: "منتخب کردہ: ",
+        selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں!",
+        wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس آگ کے لیے موزوں نہیں ہے۔",
+        expWaterOk: "✅ آگ بجھ گئی! نچلے حصے پر سپرے کریں۔",
+        expFoamAOk: "✅ آگ بجھ گئی! فوم کو اوپر سے نیچے ڈالیں۔",
+        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ سکتا ہے!",
+        expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے!",
+        expCO2Ok: "✅ آگ بجھ گئی! CO2 بجلی کی آگ کے لیے بہترین ہے۔",
+        expFoamOk: "✅ آگ بجھ گئی! فوم کو اوپر سے نیچے ڈالیں۔",
+        expPowderOk: "✅ آگ بجھ گئی! نچلے حصے پر سپرے کریں۔",
+        winTitle: "🎉 مبارک ہو!", winTime: "⏱️ کل وقت: ",
+        winMsg: "آپ نے تمام آلات کا صحیح انتخاب کیا ہے!",
+        newRecord: "🏆 نیا بہترین ریکارڈ!",
+        failTitle: "❌ چیلنج ناکام!", failMsg: "⚠️ غلط انتخاب! براہ کرم دوبارہ کوشش کریں۔"
       },
       hi: {
         langCode: 'hi-IN',
         contract: "अनुबंध संख्या: 10/WSD/24",
-        title: "🧯 साइट सुरक्षा: अग्निशामक मिलान खेल",
+        title: "🧯 अग्निशामक मिलान खेल",
         instructions: "💡 निर्देश: नीचे दिए गए अग्निशामक को चुनें, फिर संबंधित आग पर टैप करें।",
         selectTitle: "👇 अग्निशामक चुनें:",
-        fireA: "वर्ग A: लकड़ी / कागज / सामग्री भंडारण क्षेत्र", fireADesc: "ठोस ज्वलनशील वस्तुएं",
+        fireA: "वर्ग A: लकड़ी / कागज / भंडारण", fireADesc: "ठोस ज्वलनशील वस्तुएं",
         fireB: "वर्ग B: थिनर / पेंट / डीजल", fireBDesc: "ज्वलंत तरल पदार्थ की आग",
         fireE: "बिजली की आग: स्विचबोर्ड", fireEDesc: "चालू विद्युत उपकरण",
         extWater: "पानी वाला अग्निशामक", extFoam: "फॉर्म वाला अग्निशामक",
@@ -648,15 +670,15 @@
         extinguished: "बुझ गया", reset: "🔄 रीसेट करें", retry: "🔄 पुनः प्रयास करें", selectedTip: "चयनित: ",
         selectExtFirst: "⚠️ कृपया पहले नीचे से एक अग्निशामक चुनें!",
         wrongMatch: "💥 गलत मिलान! यह अग्निशामक इस प्रकार की आग के लिए उपयुक्त नहीं है।",
-        expWaterOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें। पानी लकड़ी और कागज की आग को ठंडा करता है।",
-        expFoamAOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें।",
+        expWaterOk: "✅ आग बुझ गई! सीधे आग के निचले हिस्से पर स्प्रे करें।",
+        expFoamAOk: "✅ आग बुझ गई! फोम को ऊपर से नीचे की ओर कवर करें।",
         expWaterElectric: "💥 खतरनाक! पानी बिजली का संवाहक है!",
         expWaterLiquid: "💥 खतरनाक! पानी से तेल की आग फैल सकती है!",
-        expCO2Ok: "✅ आग बुझ गई! आवेदन: यथासंभव आग के निचले हिस्से पर स्प्रे करें। CO2 बिजली के उपकरणों के लिए सुरक्षित है।",
-        expFoamOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें।",
-        expPowderOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें।",
+        expCO2Ok: "✅ आग बुझ गई! CO2 बिजली के उपकरणों के लिए सुरक्षित है।",
+        expFoamOk: "✅ आग बुझ गई! फोम को ऊपर से नीचे की ओर कवर करें।",
+        expPowderOk: "✅ आग बुझ गई! सीधे आग के निचले हिस्से पर स्प्रे करें।",
         winTitle: "🎉 बधाई हो!", winTime: "⏱️ कुल समय: ",
-        winMsg: "आपने सभी अग्निशामकों और सही अनुप्रयोग विधियों का सही मिलान किया है!",
+        winMsg: "आपने सभी अग्निशामकों का सही मिलान किया है!",
         newRecord: "🏆 नया सर्वश्रेष्ठ रिकॉर्ड!",
         failTitle: "❌ चुनौती विफल!", failMsg: "गलत चयन! कृपया पुनः प्रयास करें।"
       }
@@ -846,13 +868,13 @@
       for (let i = 0; i < CONFIG.sprayParticlesCount; i++) {
         particles.push({
           x: originX,
-          y: originY + 20,
-          vx: (Math.random() - 0.5) * 14,
-          vy: (Math.random() - 0.5) * 14 - 3,
-          radius: Math.random() * 8 + 3,
+          y: originY + 10,
+          vx: (Math.random() - 0.5) * 12,
+          vy: (Math.random() - 0.5) * 12 - 2,
+          radius: Math.random() * 6 + 2,
           color: colors[Math.floor(Math.random() * colors.length)],
           alpha: 1,
-          life: Math.random() * 0.4 + 0.6
+          life: Math.random() * 0.4 + 0.5
         });
       }
     }
@@ -862,8 +884,8 @@
       particles.forEach((p, index) => {
         p.x += p.vx;
         p.y += p.vy;
-        p.alpha -= 0.02;
-        p.radius *= 0.97;
+        p.alpha -= 0.025;
+        p.radius *= 0.96;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -1046,7 +1068,7 @@
         triggerHaptic('wrong');
         setStatus(t.selectExtFirst, 'error', true);
         zoneElement.classList.add('shake-effect');
-        setTimeout(() => zoneElement.classList.remove('shake-effect'), 500);
+        setTimeout(() => zoneElement.classList.remove('shake-effect'), 400);
         return;
       }
 

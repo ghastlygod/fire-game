@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>義合工程 10/WSD/24 - 滅火筒對對碰 (中秋版)</title>
+  <title>義合工程 10/WSD/24 - 滅火筒對對碰 (中秋升級版)</title>
   <style>
     :root {
       --primary: #f39c12;
@@ -76,7 +76,7 @@
 
     .company-header {
       width: 100%;
-      max-width: 850px;
+      max-width: 950px;
       background: #ffffff;
       padding: 12px 20px;
       border-radius: 10px;
@@ -122,25 +122,80 @@
       justify-content: center;
       min-height: 70vh;
       width: 100%;
-      max-width: 500px;
-      text-align: center;
+      max-width: 900px;
     }
 
-    .lang-title { font-size: 1.6rem; color: var(--primary); margin-bottom: 25px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-    .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+    .home-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    @media (max-width: 768px) {
+      .home-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .home-section {
+      background: rgba(27, 42, 71, 0.85);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(243, 156, 18, 0.4);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .lang-title { font-size: 1.4rem; color: var(--primary); margin-bottom: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); text-align: center; }
+    .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
     .lang-btn {
-      background: rgba(27, 42, 71, 0.9);
+      background: rgba(15, 43, 72, 0.9);
       border: 2px solid var(--primary);
       border-radius: 12px;
-      padding: 20px 10px;
+      padding: 18px 10px;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .lang-btn:hover { background: var(--primary); color: #000; transform: scale(1.05); }
+    .lang-btn:hover { background: var(--primary); color: #000; transform: scale(1.03); }
+
+    .leaderboard-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+      font-size: 0.95rem;
+    }
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .leaderboard-table th {
+      color: var(--primary);
+      font-weight: bold;
+      background: rgba(0,0,0,0.2);
+    }
+    .leaderboard-table tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .no-record {
+      text-align: center;
+      color: #95a5a6;
+      padding: 20px;
+      font-style: italic;
+    }
 
     .game-container { max-width: 850px; width: 100%; }
 
@@ -208,7 +263,7 @@
 
     .fire-zones {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin-bottom: 25px;
     }
@@ -310,12 +365,13 @@
       border: 2px solid #7f8c8d;
       border-radius: 12px;
       padding: 10px;
-      cursor: pointer;
+      cursor: grab;
       display: flex;
       flex-direction: column;
       align-items: center;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    .ext-card:active { cursor: grabbing; }
     .ext-card:hover { transform: translateY(-4px); }
     
     .ext-card.selected {
@@ -324,6 +380,21 @@
       box-shadow: 0 0 30px rgba(0, 255, 204, 0.9);
       transform: translateY(-14px) scale(1.08);
       animation: pickupFloat 1.6s infinite ease-in-out alternate;
+    }
+
+    .ext-card.disabled-ext {
+      background: rgba(44, 62, 80, 0.4);
+      border-color: #4a5568 !important;
+      opacity: 0.4;
+      filter: grayscale(100%);
+      cursor: not-allowed;
+      pointer-events: none;
+      transform: none !important;
+      box-shadow: none !important;
+      animation: none !important;
+    }
+    .ext-card.disabled-ext .ext-svg {
+      filter: grayscale(100%);
     }
     
     @keyframes pickupFloat {
@@ -386,15 +457,31 @@
     }
     .modal-box.success-modal { border-top: 8px solid var(--correct); }
     .modal-box.fail-modal { border-top: 8px solid var(--wrong); }
+    .modal-box.pass-modal { border-top: 8px solid var(--primary); }
 
     .modal-icon { font-size: 4rem; margin-bottom: 10px; }
-    .modal-title { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; }
+    .modal-title { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: var(--text-light); }
     .modal-box.success-modal .modal-title { color: var(--correct); }
     .modal-box.fail-modal .modal-title { color: var(--wrong); }
+    .modal-box.pass-modal .modal-title { color: var(--primary); }
 
     .modal-time { font-size: 1.1rem; color: #f1c40f; font-weight: bold; margin-bottom: 15px; }
     .modal-msg { font-size: 1rem; color: #ecf0f1; line-height: 1.5; margin-bottom: 25px; }
     
+    .modal-input {
+      width: 80%;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+      background: #1b2a47;
+      color: #fff;
+      margin-bottom: 20px;
+      text-align: center;
+      outline: none;
+    }
+    .modal-input::placeholder { color: #95a5a6; }
+
     .modal-btn {
       background: var(--primary);
       color: #000;
@@ -405,6 +492,25 @@
       cursor: pointer;
       font-size: 1.1rem;
     }
+
+    .pass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .pass-step-btn {
+      background: #34495e;
+      border: 2px solid var(--primary);
+      color: white;
+      padding: 15px 10px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pass-step-btn:hover { background: var(--primary); color: #000; }
   </style>
 </head>
 <body>
@@ -424,12 +530,32 @@
   </div>
 
   <div id="lang-screen">
-    <div class="lang-title">🧯 請揀選語言 / Select Language</div>
-    <div class="lang-grid">
-      <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
-      <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
-      <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
-      <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
+    <div class="home-layout">
+      <div class="home-section leaderboard-container">
+        <div class="lang-title" id="ui-lb-title">🏆 英雄榜 (最佳排位)</div>
+        <div style="overflow-x:auto;">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">排名</th>
+                <th style="width: 55%;">名稱 / 姓名</th>
+                <th style="width: 30%;">用時</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="home-section">
+        <div class="lang-title" id="ui-select-lang-title">🧯 請揀選語言 / Select Language</div>
+        <div class="lang-grid" style="margin: auto 0;">
+          <button class="lang-btn" onclick="startGame('yue')" aria-label="選擇廣東話語言">廣東話 (粵語)</button>
+          <button class="lang-btn" onclick="startGame('en')" aria-label="Select English language">English</button>
+          <button class="lang-btn" onclick="startGame('ur')" aria-label="Urdu language">اردو (Urdu)</button>
+          <button class="lang-btn" onclick="startGame('hi')" aria-label="Hindi language">हिन्दी (Hindi)</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -446,7 +572,7 @@
     </div>
 
     <div class="status-bar info" id="status-bar" role="status" aria-live="polite">
-      💡 操作指引：先喺下面點擊「滅火筒」，然後再點擊對應嘅「火災場景」。
+      💡 操作指引：點擊或拖曳滅火筒到對應嘅「火災場景」。
     </div>
 
     <div class="fire-zones" id="fire-zones-container">
@@ -454,7 +580,7 @@
         <div class="fire-icon-wrapper">
           <div class="fire-icon flame-active" id="icon-water">🔥🪵📦</div>
         </div>
-        <div class="fire-title" id="ui-fire-a">A類：木材 / 廢紙 / 物料存放區</div>
+        <div class="fire-title" id="ui-fire-a">A類：木材 / 廢紙</div>
         <div class="fire-desc" id="ui-fire-a-desc">固體可燃物火警</div>
         <div class="drop-slot" id="slot-water">---</div>
       </div>
@@ -463,7 +589,7 @@
         <div class="fire-icon-wrapper">
           <div class="fire-icon flame-active" id="icon-foam">🔥🛢️🪔</div>
         </div>
-        <div class="fire-title" id="ui-fire-b">B類：天拿水 / 油漆 / 柴油</div>
+        <div class="fire-title" id="ui-fire-b">B類：天拿水 / 油漆</div>
         <div class="fire-desc" id="ui-fire-b-desc">易燃液體火警</div>
         <div class="drop-slot" id="slot-foam">---</div>
       </div>
@@ -472,9 +598,18 @@
         <div class="fire-icon-wrapper">
           <div class="fire-icon flame-active" id="icon-co2">🔥⚡🔌</div>
         </div>
-        <div class="fire-title" id="ui-fire-e">電器火警：配電箱 / 發電機</div>
+        <div class="fire-title" id="ui-fire-e">電器：配電箱 / 發電機</div>
         <div class="fire-desc" id="ui-fire-e-desc">通電設備火警</div>
         <div class="drop-slot" id="slot-co2">---</div>
+      </div>
+
+      <div class="fire-card" id="card-gas" data-type="gas" role="button" tabindex="0" onclick="selectZone(this)">
+        <div class="fire-icon-wrapper">
+          <div class="fire-icon flame-active" id="icon-gas">🔥⛽⚠️</div>
+        </div>
+        <div class="fire-title" id="ui-fire-c">C類：石油氣氣樽</div>
+        <div class="fire-desc" id="ui-fire-c-desc">可燃氣體洩漏火警</div>
+        <div class="drop-slot" id="slot-gas">---</div>
       </div>
     </div>
 
@@ -512,7 +647,7 @@
           <rect x="18" y="38" width="24" height="20" fill="#2d3436"/>
           <text x="30" y="52" fill="#fff" font-size="9" font-weight="bold" text-anchor="middle">CO2</text>
         </svg>
-        <div class="ext-name" id="ui-ext-co2">二氧化碳滅火筒 (CO2)</div>
+        <div class="ext-name" id="ui-ext-co2">二氧化碳 (CO2)</div>
       </div>
 
       <div class="ext-card" data-ext="powder" role="button" tabindex="0" onclick="selectExt(this)">
@@ -523,7 +658,7 @@
           <rect x="18" y="38" width="24" height="20" fill="#2980b9"/>
           <text x="30" y="52" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">POWDER</text>
         </svg>
-        <div class="ext-name" id="ui-ext-powder">ABC乾粉滅火筒 (Powder)</div>
+        <div class="ext-name" id="ui-ext-powder">ABC乾粉 (Powder)</div>
       </div>
 
     </div>
@@ -531,9 +666,21 @@
     <button class="reset-btn" id="ui-reset" onclick="resetGame()" aria-label="重新開始遊戲並隨機洗牌">🔄 重新開始 (洗牌)</button>
   </div>
 
+  <!-- P.A.S.S. 口訣互動彈窗 -->
+  <div class="modal-overlay" id="passModal">
+    <div class="modal-box pass-modal">
+      <div class="modal-icon">🎯</div>
+      <div class="modal-title" id="passModalTitle">安全口訣 P.A.S.S. 挑戰</div>
+      <div class="modal-msg" id="passModalMsg">請按正確順序點擊滅火動作：<br><b style="color:var(--primary)" id="passTargetPrompt">1. 拔 (Pull) 保險銷</b></div>
+      <div class="pass-grid">
+        <!-- 動態生成按鈕 -->
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="videoModal">
     <div class="modal-box" style="background: #000; padding: 10px; max-width: 500px; margin: auto; display: flex; justify-content: center; align-items: center;">
-      <video id="clipVideo" style="width: 200%; max-width: 200%; height: auto; border-radius: 10px; display: block;" playsinline></video>
+      <video id="clipVideo" style="width: 100%; max-width: 100%; height: auto; border-radius: 10px; display: block;" playsinline></video>
     </div>
   </div>
 
@@ -543,15 +690,19 @@
       <div class="modal-title" id="modalTitle">🎉 恭喜通關！</div>
       <div class="modal-time" id="modalTime">⏱️ 總用時：00:15</div>
       <div class="modal-msg" id="modalMsg">訊息內容...</div>
-      <button class="modal-btn" id="modalBtn" onclick="resetGame(); closeModal();">🔄 再次挑戰</button>
+      <div id="inputSection" style="margin-bottom: 20px;">
+        <input type="text" id="playerNameInput" class="modal-input" placeholder="請輸入您的姓名/職工編號" maxlength="15">
+      </div>
+      <button class="modal-btn" id="modalBtn" onclick="handleModalButtonClick()">🔄 再次挑戰</button>
     </div>
   </div>
 
   <script>
     const CONFIG = {
-      ttsRate: 1.1,
+      ttsRate: 1.8,
       sprayParticlesCount: 65,
-      storageKey: 'yeehop_fire_best_time'
+      storageKey: 'yeehop_fire_best_time',
+      leaderboardKey: 'yeehop_fire_leaderboard'
     };
 
     const i18n = {
@@ -559,106 +710,113 @@
         langCode: 'yue-HK',
         contract: "合約編號: 10/WSD/24",
         title: "🧯 地盤消防安全：滅火筒對對碰",
-        instructions: "💡 操作指引：先喺下面點擊「滅火筒」，然後再點擊對應嘅「火災場景」。",
+        lbTitle: "🏆 英雄榜 (最佳排位)",
+        selectLangTitle: "🧯 請揀選語言 / Select Language",
+        instructions: "💡 操作指引：點擊或拖曳滅火筒到對應嘅「火災場景」。",
         selectTitle: "👇 請揀選滅火筒：",
-        fireA: "A類：木材 / 廢紙 / 物料存放區", fireADesc: "固體可燃物火警",
-        fireB: "B類：天拿水 / 油漆 / 柴油", fireBDesc: "易燃液體火警",
-        fireE: "電器火警：配電箱 / 發電機", fireEDesc: "通電設備火警",
+        fireA: "A類：木材 / 廢紙", fireADesc: "固體可燃物火警",
+        fireB: "B類：天拿水 / 油漆", fireBDesc: "易燃液體火警",
+        fireE: "電器：配電箱 / 發電機", fireEDesc: "通電設備火警",
+        fireC: "C類：石油氣氣樽", fireCDesc: "可燃氣體洩漏火警",
         extWater: "水劑滅火筒 (Water)", extFoam: "泡沫滅火筒 (Foam)",
         extCO2: "二氧化碳滅火筒 (CO2)", extPowder: "ABC 乾粉滅火筒 (Dry Powder)",
-        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", selectedTip: "拎起咗：",
-        selectExtFirst: "⚠️ 請先喺下面點擊拎起一款滅火筒先！",
-        wrongMatch: "💥 配錯啦！呢款滅火筒唔適用於呢類火警，無法有效滅火。",
-        expWaterOk: "✅ 成功滅火！應用方法：直接噴向火源底部。水劑能夠有效降溫冷卻，最適合用於木材同紙張火警。",
-        expFoamAOk: "✅ 成功滅火！應用方法：使泡沫從上而下覆蓋火源。泡沫能夠有效隔絕氧氣，適合用於A類固體火警。",
-        expWaterElectric: "💥 觸電爆炸！水會導電，用喺電器火警會導致嚴重觸電！",
-        expWaterLiquid: "💥 火勢爆發！水會沉落油底導致劇烈濺潑，擴大油火範圍！",
-        expCO2Ok: "✅ 成功滅火！應用方法：儘量向火源底部噴射。CO2 唔導電且冇殘留物，最適合用於電器火警。",
-        expFoamOk: "✅ 成功滅火！應用方法：使泡沫從上而下覆蓋火源。泡沫可以形成隔氧層覆蓋液體表面，有效撲滅油火。",
-        expFoamElectric: "💥 觸電危險！泡沫含有水分具備導電性，嚴禁用喺電器火警！",
-        expPowderOk: "✅ 成功滅火！應用方法：直接噴向火源底部。ABC 乾粉屬於多用途型，能夠有效撲滅各類火源。",
+        extinguished: "已撲熄", reset: "🔄 重新開始 (洗牌)", retry: "🔄 再次挑戰", saveScore: "💾 儲存成績", selectedTip: "拎起咗：",
+        selectExtFirst: "⚠️ 請先點擊或拖曳揀選一款滅火筒先！",
+        wrongMatch: "💥 配錯啦！呢款滅火筒唔適用於呢類火警。",
+        expWaterOk: "✅ 正確！水劑能有效降溫冷卻固體火警。",
+        expFoamAOk: "✅ 正確！泡沫能覆蓋並隔絕氧氣。",
+        expWaterElectric: "💥 觸電危險！水會導電，切忌用於電器！",
+        expWaterLiquid: "💥 火勢擴大！水會沉落油底導致油花濺潑！",
+        expCO2Ok: "✅ 正確！CO2 唔導電且冇殘留物。",
+        expFoamOk: "✅ 正確！泡沫能形成隔氧層覆蓋液體表面。",
+        expPowderOk: "✅ 正確！ABC 乾粉屬於多用途型，適合各類火警。",
         winTitle: "🎉 中秋追月慶團圓，平安防火第一位！", winTime: "⏱️ 完成時間：",
-        winMsg: "你已經成功為所有火警類型配對正確嘅滅火筒與正確應用方法，中秋平安，安全意識極高！",
-        newRecord: "🏆 創下全新最佳紀錄！",
-        failTitle: "❌ 挑戰失敗！", failMsg: "⚠️ 生命冇take Two！選擇錯誤導致火勢失控！請複習後再試一次。"
+        winMsg: "你已經成功通過所有考驗與 P.A.S.S. 口訣挑戰，請輸入姓名記錄排位！",
+        failTitle: "❌ 挑戰失敗！", failMsg: "⚠️ 選擇錯誤導致火勢失控！請重新複習安全指引。",
+        passTitle: "安全口訣 P.A.S.S. 挑戰",
+        passPrompt: "請按正確順序點擊滅火動作：",
+        passSteps: ["1. 拔 (Pull) 保險銷", "2. 瞄 (Aim) 火源底部", "3. 壓 (Squeeze) 按壓手柄", "4. 掃 (Sweep) 左右橫掃"]
       },
       en: {
         langCode: 'en-US',
         contract: "Contract No.: 10/WSD/24",
         title: "🧯 Site Safety: Fire Extinguisher Match",
-        instructions: "💡 Instructions: Pick an extinguisher below, then tap the target fire.",
+        lbTitle: "🏆 Leaderboard",
+        selectLangTitle: "🧯 Select Language",
+        instructions: "💡 Instructions: Drag or select an extinguisher to match the fire.",
         selectTitle: "👇 Select Extinguisher:",
-        fireA: "Class A: Wood / Paper / Storage Area", fireADesc: "Solid Combustible Fires",
-        fireB: "Class B: Thinner / Paint / Diesel", fireBDesc: "Flammable Liquid Fires",
-        fireE: "Electrical Fire: Switchboard", fireEDesc: "Live Electrical Equipment",
+        fireA: "Class A: Wood / Paper", fireADesc: "Solid Combustible Fires",
+        fireB: "Class B: Thinner / Paint", fireBDesc: "Flammable Liquid Fires",
+        fireE: "Electrical: Switchboard", fireEDesc: "Live Electrical Equipment",
+        fireC: "Class C: LPG Cylinder", fireCDesc: "Flammable Gas Leak",
         extWater: "Water Extinguisher", extFoam: "Foam Extinguisher",
         extCO2: "CO2 Extinguisher", extPowder: "ABC Dry Powder",
-        extinguished: "Extinguished", reset: "🔄 Restart (Shuffle)", retry: "🔄 Try Again", selectedTip: "Picked: ",
-        selectExtFirst: "⚠️ Please pick an extinguisher from below first!",
-        wrongMatch: "💥 Incorrect Match! This extinguisher is unsuitable for this fire type.",
-        expWaterOk: "✅ Fire Extinguished! Application: Aim directly at the base of the fire. Water cools solid fires like wood and paper.",
-        expFoamAOk: "✅ Fire Extinguished! Application: Direct foam from top to bottom to cover the fire source.",
-        expWaterElectric: "💥 Electrocution! Water conducts electricity!",
-        expWaterLiquid: "💥 Explosion! Water splashes boiling oil and spreads fire!",
-        expCO2Ok: "✅ Fire Extinguished! Application: Aim as close to the base of the fire as possible. CO2 is non-conductive, ideal for electrical fires.",
-        expFoamOk: "✅ Fire Extinguished! Application: Direct foam from top to bottom to cover the fire source.",
-        expPowderOk: "✅ Fire Extinguished! Application: Aim directly at the base of the fire. ABC Powder smothers fire effectively.",
+        extinguished: "Extinguished", reset: "🔄 Restart (Shuffle)", retry: "🔄 Try Again", saveScore: "💾 Save Score", selectedTip: "Picked: ",
+        selectExtFirst: "⚠️ Please pick an extinguisher first!",
+        wrongMatch: "💥 Incorrect Match! Unsuitable for this fire type.",
+        expWaterOk: "✅ Correct! Water cools solid fires effectively.",
+        expFoamAOk: "✅ Correct! Foam smothers fires efficiently.",
+        expWaterElectric: "💥 Electrocution hazard! Water conducts electricity!",
+        expWaterLiquid: "💥 Explosion! Water spreads burning oil!",
+        expCO2Ok: "✅ Correct! CO2 is non-conductive and clean.",
+        expFoamOk: "✅ Correct! Foam covers liquid surfaces.",
+        expPowderOk: "✅ Correct! ABC Powder is versatile for multiple fires.",
         winTitle: "🎉 Stage Cleared!", winTime: "⏱️ Time Taken: ",
-        winMsg: "You correctly matched all extinguishers and application methods. Excellent safety awareness!",
-        newRecord: "🏆 New Best Record Created!",
-        failTitle: "❌ Challenge Failed!", failMsg: "⚠️ Incorrect choice caused fire to spread! Please review safety instructions."
+        winMsg: "You cleared all fire matches and P.A.S.S. training! Enter your name:",
+        failTitle: "❌ Challenge Failed!", failMsg: "⚠️ Incorrect choice! Please review fire safety.",
+        passTitle: "P.A.S.S. Safety Challenge",
+        passPrompt: "Click the fire safety steps in the correct order:",
+        passSteps: ["1. Pull Pin", "2. Aim at Base", "3. Squeeze Handle", "4. Sweep Side to Side"]
       },
       ur: {
         langCode: 'ur-PK',
         contract: "Contract No.: 10/WSD/24",
-        title: "🧯 سائٹ کی حفاظت: آگ بجھانے والا میچ / Site Safety: Fire Extinguisher Match",
-        instructions: "💡 طریقہ: نیچے سے آگ بجھانے والا آلہ منتخب کریں، پھر آگ پر ٹیپ کریں۔ / Instructions: Pick an extinguisher below, then tap the target fire.",
-        selectTitle: "👇 سلنڈر منتخب کریں / Select Extinguisher:",
-        fireA: "کلاس A: لکڑی / کاغذ / مٹیریل سٹوریج / Class A: Wood / Storage", fireADesc: "ٹھوس شعلہ گیر مواد / Solid Combustible Fires",
-        fireB: "کلاس B: تھنر / پینٹ / ڈیزل / Class B: Thinner / Paint / Diesel", fireBDesc: "قابل اشتعال مائع آگ / Flammable Liquid Fires",
-        fireE: "بجلی کی آگ: سوئچ بورڈ / Electrical Fire: Switchboard", fireEDesc: "برقی الات کی آگ / Live Electrical Equipment",
-        extWater: "پانی Water Extinguisher", extFoam: "فوم Foam Extinguisher",
-        extCO2: "کاربن ڈائی آکسائیڈ CO2 Extinguisher", extPowder: "خشک پاؤڈر ABC Dry Powder",
-        extinguished: "بجھ گیا / Extinguished", reset: "🔄 دوبارہ شروع / Restart (Shuffle)", retry: "🔄 دوبارہ کوشش کریں / Try Again", selectedTip: "منتخب کردہ: / Picked: ",
-        selectExtFirst: "⚠️ پہلے نیچے سے ایک سلنڈر منتخب کریں! / Please pick an extinguisher from below first!",
-        wrongMatch: "💥 غلط انتخاب! یہ سلنڈر اس قسم کی آگ کے لیے صحیح نہیں ہے۔ / Incorrect Match! This extinguisher is unsuitable for this fire type.",
-        expWaterOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base of the fire.",
-        expFoamAOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expWaterElectric: "💥 خطرناک! پانی سے کرنٹ لگ सकता है / Electrocution! Water conducts electricity!",
-        expWaterLiquid: "💥 خطرناک! پانی سے تیل کی آگ پھیل سکتی ہے / Explosion! Water splashes boiling oil and spreads fire!",
-        expCO2Ok: "✅ آگ بجھ گئی! طریقہ: جتنا ہو سکے آگ کے نچلے حصے پر نشانہ بنائیں۔ / Fire Extinguished! Aim towards the base.",
-        expFoamOk: "✅ آگ بجھ گئی! طریقہ: فوم کو اوپر سے نیچے کی طرف ڈالیں۔ / Fire Extinguished! Direct foam from top to bottom.",
-        expPowderOk: "✅ آگ بجھ گئی! طریقہ: آگ کے نچلے حصے پر براہ راست سپرے کریں۔ / Fire Extinguished! Aim directly at the base.",
-        winTitle: "🎉 مبارک ہو! / Stage Cleared!", winTime: "⏱️ کل وقت: / Time Taken: ",
-        winMsg: "آپ نے تمام آگ بجھانے والے آلات کا صحیح انتخاب کیا ہے! / You correctly matched all extinguishers.",
-        newRecord: "🏆 نیا بہترین ریکارڈ! / New Best Record Created!",
-        failTitle: "❌ چیلنج ناکام / Challenge Failed!", failMsg: "⚠️ غلط انتخاب! براہ کرم دوبارہ کوشش کریں۔ / Incorrect choice caused fire to spread!"
+        title: "🧯 سائٹ کی حفاظت: آگ بجھانے والا میچ",
+        lbTitle: "🏆 لیڈر بورڈ",
+        selectLangTitle: "🧯 زبان منتخب کریں",
+        instructions: "💡 طریقہ: سلنڈر کو گھسیٹ کر یا منتخب کر کے آگ پر لائیں۔",
+        selectTitle: "👇 سلنڈر منتخب کریں:",
+        fireA: "کلاس A: لکڑی / کاغذ", fireADesc: "ٹھوس شعلہ گیر مواد",
+        fireB: "کلاس B: پینٹ / تینر", fireBDesc: "قابل اشتعال مائع آگ",
+        fireE: "بجلی کی آگ: سوئچ بورڈ", fireEDesc: "برقی الات کی آگ",
+        fireC: "کلاس C: گیس سلنڈر", fireCDesc: "گیس لیکج کی آگ",
+        extWater: "پانی (Water)", extFoam: "فوم (Foam)",
+        extCO2: "کاربن ڈائی آکسائیڈ (CO2)", extPowder: "خشک پاؤڈر (Powder)",
+        extinguished: "بجھ گیا", reset: "🔄 دوبارہ شروع", retry: "🔄 دوبارہ کوشش کریں", saveScore: "💾 سکور محفوظ کریں", selectedTip: "منتخب کردہ: ",
+        selectExtFirst: "⚠️ پہلے ایک سلنڈر منتخب کریں!",
+        wrongMatch: "💥 غلط انتخاب!",
+        expWaterOk: "✅ درست!", expFoamAOk: "✅ درست!", expWaterElectric: "💥 خطرناک!", expWaterLiquid: "💥 خطرناک!",
+        expCO2Ok: "✅ درست!", expFoamOk: "✅ درست!", expPowderOk: "✅ درست!",
+        winTitle: "🎉 مبارک ہو!", winTime: "⏱️ کل وقت: ", winMsg: "آپ نے کامیابی حاصل کر لی! نام درج کریں:",
+        failTitle: "❌ ناکام", failMsg: "⚠️ غلط انتخاب!",
+        passTitle: "P.A.S.S. حفاظتی چیلنج",
+        passPrompt: "درست ترتیب میں قدم منتخب کریں:",
+        passSteps: ["1. پن کھینچیں (Pull)", "2. نشانہ لیں (Aim)", "3. دبائیں (Squeeze)", "4. ادھر ادھر ہلائیں (Sweep)"]
       },
       hi: {
         langCode: 'hi-IN',
         contract: "अनुबंध संख्या: 10/WSD/24",
         title: "🧯 साइट सुरक्षा: अग्निशामक मिलान खेल",
-        instructions: "💡 निर्देश: नीचे दिए गए अग्निशामक को चुनें, फिर संबंधित आग पर टैप करें।",
+        lbTitle: "🏆 लीडरबोर्ड",
+        selectLangTitle: "🧯 भाषा चुनें",
+        instructions: "💡 निर्देश: अग्निशामक को खींचकर या चुनकर आग के स्थान पर रखें।",
         selectTitle: "👇 अग्निशामक चुनें:",
-        fireA: "वर्ग A: लकड़ी / कागज / सामग्री भंडारण क्षेत्र", fireADesc: "ठोस ज्वलनशील वस्तुएं",
-        fireB: "वर्ग B: थिनर / पेंट / डीजल", fireBDesc: "ज्वलंत तरल पदार्थ की आग",
+        fireA: "वर्ग A: लकड़ी / कागज", fireADesc: "ठोस ज्वलनशील वस्तुएं",
+        fireB: "वर्ग B: पेंट / थिनर", fireBDesc: "ज्वलंत तरल पदार्थ की आग",
         fireE: "बिजली की आग: स्विचबोर्ड", fireEDesc: "चालू विद्युत उपकरण",
-        extWater: "पानी वाला अग्निशामक", extFoam: "फॉर्म वाला अग्निशामक",
-        extCO2: "कार्बन डाइऑक्साइड (CO2)", extPowder: "ABC ड्राई पाउडर",
-        extinguished: "बुझ गया", reset: "🔄 रीसेट करें", retry: "🔄 पुनः प्रयास करें", selectedTip: "चयनित: ",
-        selectExtFirst: "⚠️ कृपया पहले नीचे से एक अग्निशामक चुनें!",
-        wrongMatch: "💥 गलत मिलान! यह अग्निशामक इस प्रकार की आग के लिए उपयुक्त नहीं है।",
-        expWaterOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें। पानी लकड़ी और कागज की आग को ठंडा करता है।",
-        expFoamAOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें।",
-        expWaterElectric: "💥 खतरनाक! पानी बिजली का संवाहक है!",
-        expWaterLiquid: "💥 खतरनाक! पानी से तेल की आग फैल सकती है!",
-        expCO2Ok: "✅ आग बुझ गई! आवेदन: यथासंभव आग के निचले हिस्से पर स्प्रे करें। CO2 बिजली के उपकरणों के लिए सुरक्षित है।",
-        expFoamOk: "✅ आग बुझ गई! आवेदन: फोम को ऊपर से नीचे की ओर कवर करें।",
-        expPowderOk: "✅ आग बुझ गई! आवेदन: सीधे आग के निचले हिस्से पर स्प्रे करें।",
-        winTitle: "🎉 बधाई हो!", winTime: "⏱️ कुल समय: ",
-        winMsg: "आपने सभी अग्निशामकों और सही अनुप्रयोग विधियों का सही मिलान किया है!",
-        newRecord: "🏆 नया सर्वश्रेष्ठ रिकॉर्ड!",
-        failTitle: "❌ चुनौती विफल!", failMsg: "गलत चयन! कृपया पुनः प्रयास करें।"
+        fireC: "वर्ग C: गैस सिलेंडर", fireCDesc: "गैस रिसाव आग",
+        extWater: "पानी वाला (Water)", extFoam: "फॉर्म वाला (Form)",
+        extCO2: "CO2 अग्निशामक", extPowder: "ABC ड्राई पाउडर",
+        extinguished: "बुझ गया", reset: "🔄 रीसेट", retry: "🔄 पुनः प्रयास", saveScore: "💾 स्कोर सहेजें", selectedTip: "चयनित: ",
+        selectExtFirst: "⚠️ कृपया पहले एक अग्निशामक चुनें!",
+        wrongMatch: "💥 गलत मिलान!",
+        expWaterOk: "✅ सही!", expFoamAOk: "✅ सही!", expWaterElectric: "💥 खतरनाक!", expWaterLiquid: "💥 खतरनाक!",
+        expCO2Ok: "✅ सही!", expFoamOk: "✅ सही!", expPowderOk: "✅ सही!",
+        winTitle: "🎉 बधाई हो!", winTime: "⏱️ कुल समय: ", winMsg: "आपने सभी चरण पूरे किए! नाम दर्ज करें:",
+        failTitle: "❌ विफल", failMsg: "⚠️ गलत चयन!",
+        passTitle: "P.A.S.S. सुरक्षा चुनौती",
+        passPrompt: "सही क्रम में कदम चुनें:",
+        passSteps: ["1. पिन खींचें (Pull)", "2. निशाना लगाएं (Aim)", "3. दबाएं (Squeeze)", "4. स्वेप करें (Sweep)"]
       }
     };
 
@@ -671,11 +829,18 @@
     let matchedCount = 0;
     let ttsEnabled = true;
     let singleUseEnabled = false;
+    let modalState = 'win';
+
+    let pendingZoneElement = null;
+    let pendingExtType = null;
+    let currentPassStep = 0;
+    const passSequence = [0, 1, 2, 3]; // 對應步驟索引
 
     const correctMatches = {
       water: ['water', 'foam', 'powder'],
       foam: ['foam', 'co2', 'powder'],
-      co2: ['co2', 'powder']
+      co2: ['co2', 'powder'],
+      gas: ['powder', 'co2']
     };
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -689,10 +854,34 @@
     function playSound(type) {
       try {
         initAudio();
+        const now = audioCtx.currentTime;
+
+        if (type === 'spray') {
+          const bufferSize = audioCtx.sampleRate * 0.6;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * 0.5;
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = 1200;
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+          return;
+        }
+
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        const now = audioCtx.currentTime;
+        osc.connect(gain); 
+        gain.connect(audioCtx.destination);
 
         if (type === 'select') {
           osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
@@ -757,8 +946,7 @@
       }
 
       if (systemVoices.length === 0) initVoices();
-      let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'yue-hk' || v.lang.toLowerCase().startsWith('yue')) ||
-                         systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'zh-hk');
+      let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === i18n[currentLang].langCode.toLowerCase() || v.lang.toLowerCase().startsWith(currentLang));
 
       if (matchedVoice && 'speechSynthesis' in window) {
         const msg = new SpeechSynthesisUtterance(cleanText);
@@ -779,7 +967,7 @@
         window.speechSynthesis.speak(msg);
         setTimeout(triggerEnd, (cleanText.length * 350) + 2000);
       } else {
-        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=yue&client=tw-ob`;
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=${currentLang}&client=tw-ob`;
         currentAudioFallback = new Audio(ttsUrl);
         
         let finished = false;
@@ -792,9 +980,7 @@
         currentAudioFallback.onended = triggerEnd;
         currentAudioFallback.onerror = triggerEnd;
         
-        currentAudioFallback.play().catch(() => {
-          triggerEnd();
-        });
+        currentAudioFallback.play().catch(() => triggerEnd());
       }
     }
 
@@ -885,26 +1071,66 @@
       }
     }
 
-    function displayBestRecord() {
-      const best = localStorage.getItem(CONFIG.storageKey);
-      const el = document.getElementById('best-display');
-      if (best) {
-        const mins = Math.floor(best / 60).toString().padStart(2, '0');
-        const secs = (best % 60).toString().padStart(2, '0');
-        el.textContent = `${mins}:${secs}`;
-      } else {
-        el.textContent = "--:--";
+    function getLeaderboard() {
+      try {
+        const data = localStorage.getItem(CONFIG.leaderboardKey);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
       }
     }
 
-    function checkAndUpdateBestRecord(seconds) {
-      const best = localStorage.getItem(CONFIG.storageKey);
-      if (!best || seconds < parseInt(best)) {
-        localStorage.setItem(CONFIG.storageKey, seconds);
-        displayBestRecord();
-        return true;
+    function saveLeaderboard(lb) {
+      localStorage.setItem(CONFIG.leaderboardKey, JSON.stringify(lb));
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const secs = (seconds % 60).toString().padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function updateLeaderboardUI() {
+      const lb = getLeaderboard();
+      const tbody = document.getElementById('leaderboard-tbody');
+      tbody.innerHTML = "";
+
+      if (lb.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="no-record">暫無排位紀錄，快來挑戰！</td></tr>`;
+        document.getElementById('best-display').textContent = "--:--";
+        return;
       }
-      return false;
+
+      document.getElementById('best-display').textContent = formatTime(lb[0].time);
+
+      lb.forEach((entry, index) => {
+        const tr = document.createElement('tr');
+        let rankBadge = `${index + 1}`;
+        if (index === 0) rankBadge = '🥇 1';
+        else if (index === 1) rankBadge = '🥈 2';
+        else if (index === 2) rankBadge = '🥉 3';
+
+        tr.innerHTML = `
+          <td><strong>${rankBadge}</strong></td>
+          <td>${escapeHtml(entry.name)}</td>
+          <td><span style="color: #2ecc71; font-family: monospace; font-weight: bold;">${formatTime(entry.time)}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    function addScoreToLeaderboard(name, time) {
+      let lb = getLeaderboard();
+      lb.push({ name: name.trim() || '匿名員工', time: time });
+      lb.sort((a, b) => a.time - b.time);
+      if (lb.length > 10) lb = lb.slice(0, 10);
+      saveLeaderboard(lb);
+      updateLeaderboardUI();
     }
 
     function updateLanguageUI() {
@@ -912,6 +1138,8 @@
       document.getElementById('ui-contract').textContent = t.contract;
       document.getElementById('ui-title').textContent = t.title;
       document.getElementById('ui-ext-select-title').textContent = t.selectTitle;
+      document.getElementById('ui-lb-title').textContent = t.lbTitle;
+      document.getElementById('ui-select-lang-title').textContent = t.selectLangTitle;
       
       document.getElementById('ui-fire-a').textContent = t.fireA;
       document.getElementById('ui-fire-a-desc').textContent = t.fireADesc;
@@ -919,6 +1147,8 @@
       document.getElementById('ui-fire-b-desc').textContent = t.fireBDesc;
       document.getElementById('ui-fire-e').textContent = t.fireE;
       document.getElementById('ui-fire-e-desc').textContent = t.fireEDesc;
+      document.getElementById('ui-fire-c').textContent = t.fireC;
+      document.getElementById('ui-fire-c-desc').textContent = t.fireCDesc;
 
       document.getElementById('ui-ext-water').textContent = t.extWater;
       document.getElementById('ui-ext-foam').textContent = t.extFoam;
@@ -935,7 +1165,7 @@
       initVoices();
       document.getElementById('lang-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
-      displayBestRecord();
+      updateLeaderboardUI();
       updateLanguageUI();
       resetGame();
     }
@@ -946,6 +1176,7 @@
       if (currentAudioFallback) currentAudioFallback.pause();
       document.getElementById('game-screen').classList.add('hidden');
       document.getElementById('lang-screen').classList.remove('hidden');
+      updateLeaderboardUI();
     }
 
     function startTimer() {
@@ -1003,6 +1234,7 @@
       if (targetType === 'water') fireLetter = 'A';
       else if (targetType === 'foam') fireLetter = 'B';
       else if (targetType === 'co2') fireLetter = 'E';
+      else if (targetType === 'gas') fireLetter = 'C';
 
       if (result === 'good' && extType === 'powder') {
         return 'good_powder.mp4';
@@ -1017,15 +1249,10 @@
       videoEl.src = filename;
       videoModal.classList.add('active');
       
-      videoEl.play().catch(() => {
-        videoModal.classList.remove('active');
-        onEndedCallback();
-      });
-
-      let finished = false;
+      let isFinished = false;
       const finish = () => {
-        if (finished) return;
-        finished = true;
+        if (isFinished) return;
+        isFinished = true;
         videoEl.pause();
         videoEl.currentTime = 0;
         videoModal.classList.remove('active');
@@ -1033,6 +1260,11 @@
       };
 
       videoEl.onended = finish;
+      videoEl.onerror = () => {
+        finish();
+      };
+
+      videoEl.play().catch(() => finish());
       setTimeout(finish, 6500);
     }
 
@@ -1056,56 +1288,17 @@
       const currentUsedExt = selectedExt;
 
       isAnimating = true;
+      playSound('spray');
       createSprayParticles(zoneElement, selectedExt);
 
       const videoFilename = getResultVideoFilename(isCorrect ? 'good' : 'bad', targetType, selectedExt);
 
       playClipVideo(videoFilename, () => {
         if (isCorrect) {
-          playSound('correct');
-          triggerHaptic('correct');
-          iconEl.classList.remove('flame-active');
-          iconEl.classList.add('extinguish-anim');
-          zoneElement.classList.add('matched-correct');
-
-          let expMsg = t.expPowderOk;
-          if (selectedExt === 'water') expMsg = t.expWaterOk;
-          if (selectedExt === 'foam') {
-            expMsg = (targetType === 'water') ? t.expFoamAOk : t.expFoamOk;
-          }
-          if (selectedExt === 'co2') expMsg = t.expCO2Ok;
-
-          setStatus(expMsg, 'success', true);
-
-          setTimeout(() => {
-            iconEl.classList.remove('extinguish-anim');
-            iconEl.innerHTML = `<div>💨</div><div class="extinguished-badge">✅ ${t.extinguished}</div>`;
-            iconEl.style.opacity = "1";
-            iconEl.style.transform = "scale(1)";
-
-            const slot = zoneElement.querySelector('.drop-slot');
-            slot.textContent = "✅ " + document.querySelector(`.ext-card[data-ext="${currentUsedExt}"] .ext-name`).textContent;
-
-            if (singleUseEnabled) {
-              const extCard = document.querySelector(`.ext-card[data-ext="${currentUsedExt}"]`);
-              if (extCard) {
-                extCard.classList.remove('selected');
-                extCard.classList.add('disabled-ext');
-              }
-            } else {
-              document.querySelectorAll('.ext-card').forEach(c => c.classList.remove('selected'));
-            }
-
-            matchedCount++;
-            selectedExt = null;
-            isAnimating = false;
-
-            if (matchedCount >= 3) {
-              stopTimer();
-              showWinModal();
-            }
-          }, 300);
-
+          pendingZoneElement = zoneElement;
+          pendingExtType = currentUsedExt;
+          isAnimating = false;
+          showPassModal();
         } else {
           playSound('wrong');
           triggerHaptic('wrong');
@@ -1116,10 +1309,8 @@
           let expMsg = t.wrongMatch;
           if (selectedExt === 'water' && targetType === 'co2') expMsg = t.expWaterElectric;
           if (selectedExt === 'water' && targetType === 'foam') expMsg = t.expWaterLiquid;
-          if (selectedExt === 'foam' && targetType === 'co2') expMsg = t.expFoamElectric;
 
           stopTimer();
-          
           showFailModal(expMsg);
 
           setTimeout(() => {
@@ -1130,30 +1321,129 @@
       });
     }
 
+    function showPassModal() {
+      currentPassStep = 0;
+      const t = i18n[currentLang];
+      
+      document.getElementById('passModalTitle').textContent = t.passTitle;
+      document.getElementById('passModalMsg').innerHTML = `${t.passPrompt}<br><b style="color:var(--primary)" id="passTargetPrompt"></b>`;
+      
+      const grid = document.querySelector('.pass-grid');
+      grid.innerHTML = "";
+      
+      let stepsWithIndex = t.passSteps.map((text, idx) => ({ text, idx }));
+      stepsWithIndex.sort(() => Math.random() - 0.5);
+
+      stepsWithIndex.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'pass-step-btn';
+        btn.textContent = item.text;
+        btn.onclick = () => checkPassStep(item.idx);
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('passModal').classList.add('active');
+      updatePassPrompt();
+      speakText(t.passPrompt);
+    }
+
+    function updatePassPrompt() {
+      const t = i18n[currentLang];
+      const targetText = t.passSteps[currentPassStep];
+      document.getElementById('passTargetPrompt').textContent = targetText;
+    }
+
+    function checkPassStep(stepIndex) {
+      if (stepIndex === passSequence[currentPassStep]) {
+        currentPassStep++;
+        playSound('select');
+        if (currentPassStep >= passSequence.length) {
+          document.getElementById('passModal').classList.remove('active');
+          finalizeSuccessfulExtinguish();
+        } else {
+          updatePassPrompt();
+        }
+      } else {
+        playSound('wrong');
+        triggerHaptic('wrong');
+      }
+    }
+
+    function finalizeSuccessfulExtinguish() {
+      const t = i18n[currentLang];
+      const zoneElement = pendingZoneElement;
+      const currentUsedExt = pendingExtType;
+      const targetType = zoneElement.getAttribute('data-type');
+      const iconEl = zoneElement.querySelector('.fire-icon');
+
+      playSound('correct');
+      triggerHaptic('correct');
+      iconEl.classList.remove('flame-active');
+      iconEl.classList.add('extinguish-anim');
+      zoneElement.classList.add('matched-correct');
+
+      let expMsg = t.expPowderOk;
+      if (currentUsedExt === 'water') expMsg = t.expWaterOk;
+      if (currentUsedExt === 'foam') {
+        expMsg = (targetType === 'water') ? t.expFoamAOk : t.expFoamOk;
+      }
+      if (currentUsedExt === 'co2') expMsg = t.expCO2Ok;
+
+      setStatus(expMsg, 'success', true);
+
+      setTimeout(() => {
+        iconEl.classList.remove('extinguish-anim');
+        iconEl.innerHTML = `<div>💨</div><div class="extinguished-badge">✅ ${t.extinguished}</div>`;
+        iconEl.style.opacity = "1";
+        iconEl.style.transform = "scale(1)";
+
+        const slot = zoneElement.querySelector('.drop-slot');
+        const extCardEl = document.querySelector(`.ext-card[data-ext="${currentUsedExt}"]`);
+        slot.textContent = "✅ " + (extCardEl ? extCardEl.querySelector('.ext-name').textContent : '');
+
+        if (singleUseEnabled) {
+          if (extCardEl) {
+            extCardEl.classList.remove('selected');
+            extCardEl.classList.add('disabled-ext');
+          }
+        } else {
+          document.querySelectorAll('.ext-card').forEach(c => c.classList.remove('selected'));
+        }
+
+        matchedCount++;
+        selectedExt = null;
+        isAnimating = false;
+
+        if (matchedCount >= 4) {
+          stopTimer();
+          showWinModal();
+        }
+      }, 300);
+    }
+
     function showWinModal() {
       playSound('win');
+      modalState = 'win';
       const t = i18n[currentLang];
       const timeStr = document.getElementById('timer-display').textContent;
-      const isNewRecord = checkAndUpdateBestRecord(secondsElapsed);
 
       document.getElementById('modalBox').className = "modal-box success-modal";
       document.getElementById('modalIcon').textContent = "🏮";
       document.getElementById('modalTitle').textContent = t.winTitle;
       document.getElementById('modalTime').textContent = t.winTime + timeStr;
       document.getElementById('modalTime').style.display = "block";
-
-      let finalMsg = t.winMsg;
-      if (isNewRecord) finalMsg = `<b>${t.newRecord}</b><br>` + finalMsg;
-      document.getElementById('modalMsg').innerHTML = finalMsg;
-      document.getElementById('modalBtn').textContent = t.retry;
+      document.getElementById('modalMsg').innerHTML = t.winMsg;
+      
+      document.getElementById('inputSection').style.display = "block";
+      document.getElementById('playerNameInput').value = "";
+      document.getElementById('modalBtn').textContent = t.saveScore;
 
       document.getElementById('resultModal').classList.add('active');
-
-      const winSpeechText = t.winTitle + " " + (isNewRecord ? t.newRecord : "") + " " + t.winMsg;
-      speakText(winSpeechText);
+      speakText(t.winTitle + " " + t.winMsg);
     }
 
     function showFailModal(errorReason) {
+      modalState = 'fail';
       const t = i18n[currentLang];
       document.getElementById('modalBox').className = "modal-box fail-modal";
       document.getElementById('modalIcon').textContent = "💥";
@@ -1162,12 +1452,24 @@
       
       const modalMsgContent = `<b>${errorReason}</b><br><br>${t.failMsg}`;
       document.getElementById('modalMsg').innerHTML = modalMsgContent;
+      
+      document.getElementById('inputSection').style.display = "none";
       document.getElementById('modalBtn').textContent = t.retry;
 
       document.getElementById('resultModal').classList.add('active');
+      speakText(`${t.failTitle} ${errorReason} ${t.failMsg}`);
+    }
 
-      const failSpeechText = `${t.failTitle} ${errorReason} ${t.failMsg}`;
-      speakText(failSpeechText);
+    function handleModalButtonClick() {
+      if (modalState === 'win') {
+        const nameInput = document.getElementById('playerNameInput').value;
+        addScoreToLeaderboard(nameInput, secondsElapsed);
+        closeModal();
+        showLangScreen();
+      } else {
+        closeModal();
+        resetGame();
+      }
     }
 
     function closeModal() {
@@ -1187,25 +1489,45 @@
       document.querySelectorAll('.ext-card').forEach(c => c.classList.remove('selected', 'disabled-ext'));
       document.querySelectorAll('.fire-card').forEach(c => c.classList.remove('matched-correct', 'selected', 'shake-effect'));
 
-      document.getElementById('icon-water').innerHTML = "🔥🪵📦";
-      document.getElementById('icon-water').className = "fire-icon flame-active";
-      document.getElementById('icon-water').style = "";
-
-      document.getElementById('icon-foam').innerHTML = "🔥🛢️🪔";
-      document.getElementById('icon-foam').className = "fire-icon flame-active";
-      document.getElementById('icon-foam').style = "";
-
-      document.getElementById('icon-co2').innerHTML = "🔥⚡🔌";
-      document.getElementById('icon-co2').className = "fire-icon flame-active";
-      document.getElementById('icon-co2').style = "";
-
-      document.getElementById('slot-water').textContent = '---';
-      document.getElementById('slot-foam').textContent = '---';
-      document.getElementById('slot-co2').textContent = '---';
+      ['water', 'foam', 'co2', 'gas'].forEach(type => {
+        const iconEl = document.getElementById(`icon-${type}`);
+        if (iconEl) {
+          iconEl.className = "fire-icon flame-active";
+          iconEl.style = "";
+          if (type === 'water') iconEl.innerHTML = "🔥🪵📦";
+          if (type === 'foam') iconEl.innerHTML = "🔥🛢️🪔";
+          if (type === 'co2') iconEl.innerHTML = "🔥⚡🔌";
+          if (type === 'gas') iconEl.innerHTML = "🔥⛽⚠️";
+        }
+        const slotEl = document.getElementById(`slot-${type}`);
+        if (slotEl) slotEl.textContent = '---';
+      });
 
       updateLanguageUI();
       startTimer();
     }
+
+    document.querySelectorAll('.ext-card').forEach(card => {
+      card.setAttribute('draggable', 'true');
+      card.addEventListener('dragstart', (e) => {
+        if (!gameActive || isAnimating || card.classList.contains('disabled-ext')) return;
+        selectedExt = card.getAttribute('data-ext');
+        e.dataTransfer.setData('text/plain', selectedExt);
+        playSound('select');
+      });
+    });
+
+    document.querySelectorAll('.fire-card').forEach(card => {
+      card.addEventListener('dragover', (e) => e.preventDefault());
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!gameActive || isAnimating) return;
+        selectedExt = e.dataTransfer.getData('text/plain') || selectedExt;
+        selectZone(card);
+      });
+    });
+
+    updateLeaderboardUI();
   </script>
 </body>
 </html>

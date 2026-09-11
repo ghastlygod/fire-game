@@ -946,8 +946,7 @@
       }
 
       if (systemVoices.length === 0) initVoices();
-      let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'yue-hk' || v.lang.toLowerCase().startsWith('yue')) ||
-                         systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'zh-hk');
+      let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === i18n[currentLang].langCode.toLowerCase() || v.lang.toLowerCase().startsWith(currentLang));
 
       if (matchedVoice && 'speechSynthesis' in window) {
         const msg = new SpeechSynthesisUtterance(cleanText);
@@ -968,7 +967,7 @@
         window.speechSynthesis.speak(msg);
         setTimeout(triggerEnd, (cleanText.length * 350) + 2000);
       } else {
-        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=yue&client=tw-ob`;
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=${currentLang}&client=tw-ob`;
         currentAudioFallback = new Audio(ttsUrl);
         
         let finished = false;
@@ -981,9 +980,7 @@
         currentAudioFallback.onended = triggerEnd;
         currentAudioFallback.onerror = triggerEnd;
         
-        currentAudioFallback.play().catch(() => {
-          triggerEnd();
-        });
+        currentAudioFallback.play().catch(() => triggerEnd());
       }
     }
 

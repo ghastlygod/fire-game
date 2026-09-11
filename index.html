@@ -926,80 +926,77 @@
       window.speechSynthesis.onvoiceschanged = initVoices;
     }
 
-let currentAudioFallback = null;
+    let currentAudioFallback = null;
 
-function speakText(text, onComplete = null) {
-  if (!ttsEnabled) {
-    if (onComplete) onComplete();
-    return;
-  }
-  const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
-  if (!cleanText) {
-    if (onComplete) onComplete();
-    return;
-  }
+    function speakText(text, onComplete = null) {
+      if (!ttsEnabled) {
+        if (onComplete) onComplete();
+        return;
+      }
+      const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
+      if (!cleanText) {
+        if (onComplete) onComplete();
+        return;
+      }
 
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  if (currentAudioFallback) {
-    currentAudioFallback.pause();
-    currentAudioFallback = null;
-  }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      if (currentAudioFallback) {
+        currentAudioFallback.pause();
+        currentAudioFallback = null;
+      }
 
-  if (systemVoices.length === 0) initVoices();
-  
-  // 針對不同語言設定合適的 lang 參數對應 Google TTS 支援的代碼
-  let ttsLangMap = { yue: 'yue', en: 'en', ur: 'ur', hi: 'hi' };
-  let googleLang = ttsLangMap[currentLang] || 'en';
+      if (systemVoices.length === 0) initVoices();
+      let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'yue-hk' || v.lang.toLowerCase().startsWith('yue')) ||
+                         systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === 'zh-hk');
 
-  let matchedVoice = systemVoices.find(v => v.lang.replace('_', '-').toLowerCase() === i18n[currentLang].langCode.toLowerCase() || v.lang.toLowerCase().startsWith(currentLang));
+      if (matchedVoice && 'speechSynthesis' in window) {
+        const msg = new SpeechSynthesisUtterance(cleanText);
+        msg.voice = matchedVoice;
+        msg.lang = matchedVoice.lang;
+        msg.rate = CONFIG.ttsRate;
+        
+        let finished = false;
+        const triggerEnd = () => {
+          if (finished) return;
+          finished = true;
+          if (onComplete) onComplete();
+        };
 
-  // 如果瀏覽器有該語言的原生語音，優先使用原生
-  if (matchedVoice && 'speechSynthesis' in window) {
-    const msg = new SpeechSynthesisUtterance(cleanText);
-    msg.voice = matchedVoice;
-    msg.lang = matchedVoice.lang;
-    msg.rate = CONFIG.ttsRate;
-    
-    let finished = false;
-    const triggerEnd = () => {
-      if (finished) return;
-      finished = true;
-      if (onComplete) onComplete();
-    };
+        msg.onend = triggerEnd;
+        msg.onerror = triggerEnd;
+        
+        window.speechSynthesis.speak(msg);
+        setTimeout(triggerEnd, (cleanText.length * 350) + 2000);
+      } else {
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=yue&client=tw-ob`;
+        currentAudioFallback = new Audio(ttsUrl);
+        
+        let finished = false;
+        const triggerEnd = () => {
+          if (finished) return;
+          finished = true;
+          if (onComplete) onComplete();
+        };
 
-    msg.onend = triggerEnd;
-    msg.onerror = () => {
-      // 若原生發音失敗，自動切換至雲端音訊
-      playGoogleTTS(cleanText, googleLang, triggerEnd);
-    };
-    
-    window.speechSynthesis.speak(msg);
-    setTimeout(triggerEnd, (cleanText.length * 350) + 2000);
-  } else {
-    // 如果瀏覽器沒有內置該語言（如手機或電腦缺少印地/烏爾都語包），直接走雲端音訊
-    playGoogleTTS(cleanText, googleLang, onComplete);
-  }
-}
+        currentAudioFallback.onended = triggerEnd;
+        currentAudioFallback.onerror = triggerEnd;
+        
+        currentAudioFallback.play().catch(() => {
+          triggerEnd();
+        });
+      }
+    }
 
-// 輔助函式：透過 Google 雲端語音 API 播放（支援所有語種）
-function playGoogleTTS(text, lang, onComplete) {
-  const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${lang}&client=tw-ob`;
-  currentAudioFallback = new Audio(ttsUrl);
-  
-  let finished = false;
-  const triggerEnd = () => {
-    if (finished) return;
-    finished = true;
-    if (onComplete) onComplete();
-  };
-
-  currentAudioFallback.onended = triggerEnd;
-  currentAudioFallback.onerror = triggerEnd;
-  
-  currentAudioFallback.play().catch(() => {
-    triggerEnd();
-  });
-}
+    function toggleTTS() {
+      ttsEnabled = !ttsEnabled;
+      const btn = document.getElementById('tts-toggle-btn');
+      btn.textContent = ttsEnabled ? "🔊 語音" : "🔇 靜音";
+      btn.classList.toggle('active', ttsEnabled);
+      if (!ttsEnabled) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        if (currentAudioFallback) currentAudioFallback.pause();
+      }
+    }
 
     function toggleSingleUse() {
       singleUseEnabled = !singleUseEnabled;
